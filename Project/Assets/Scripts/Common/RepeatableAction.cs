@@ -15,7 +15,7 @@ namespace Common
             _cooldown = cooldown;
             _cb = cb;
         }
-
+        
         public void Update()
         {
             if (_currentCooldown > 0)

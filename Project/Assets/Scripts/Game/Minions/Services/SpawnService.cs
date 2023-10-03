@@ -1,11 +1,12 @@
+using System;
 using Common;
 using Game.Minions.Data;
-using Game.Shared.Services;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Minions.Services
 {
-    internal class SpawnService : ITickable
+    internal class SpawnService : ITickable, IDisposable
     {
         private readonly SpawnedUnits _spawnedUnits;
         private readonly Vector3 _spawnPoint;
@@ -25,5 +26,9 @@ namespace Game.Minions.Services
         public void Tick() => _spawn.Update();
 
         private void SpawnUnit() => _pool.GetItem();
+
+        public void Dispose()
+        {
+        }
     }
 }

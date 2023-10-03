@@ -1,29 +1,28 @@
 using System.Collections.Generic;
 using Game.Minions.Data;
 using Game.Shared.Damage.Components;
-using Game.Shared.Services;
 using UnityEngine;
 
 namespace Game.Shared.Damage
 {
-    public class DamageService
+    internal class DamageService
     {
-        private static ServiceLocator Locator => ServiceLocator.Instance;
-        private static SpawnedUnits SpawnedUnits => Locator.Get<SpawnedUnits>();
-
-        private readonly DamageProcessor _damageProcessor;
+        private readonly SpawnedUnits _spawnedUnits;
         private readonly Vector3 _attackPos;
+        private readonly DamageProcessor _damageProcessor;
 
-        public DamageService(Transform characterAttackPoint)
+        public DamageService(SpawnedUnits spawnedUnits, Transform characterAttackPoint)
         {
+            _spawnedUnits = spawnedUnits;
+            _attackPos = characterAttackPoint.position;
+
             _damageProcessor = new DamageProcessor();
             _damageProcessor.OnKill += GainExp;
-            _attackPos = characterAttackPoint.position;
         }
 
         public void CharacterAttack(IDamageDealer damageDealer, float range)
         {
-            var targets = new List<MinionModel>(SpawnedUnits);
+            var targets = new List<MinionModel>(_spawnedUnits);
 
             foreach (var unit in targets)
             {

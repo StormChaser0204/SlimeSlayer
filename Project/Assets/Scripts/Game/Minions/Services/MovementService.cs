@@ -1,19 +1,21 @@
 using System;
 using System.Linq;
 using Game.Minions.Data;
-using Game.Shared.Services;
+using JetBrains.Annotations;
 using UnityEngine;
+using Zenject;
 
 namespace Game.Minions.Services
 {
-    internal class MovementService : ITickable
+    [UsedImplicitly]
+    internal class MinionsMovementService : ITickable
     {
         private readonly SpawnedUnits _units;
         private readonly float _endPointPointPosition;
 
         public Action<MinionModel> OnEndPointReached;
 
-        public MovementService(SpawnedUnits spawnedUnits, Transform endPoint)
+        public MinionsMovementService(SpawnedUnits spawnedUnits, Transform endPoint)
         {
             _units = spawnedUnits;
             _endPointPointPosition = endPoint.position.x;
@@ -21,7 +23,7 @@ namespace Game.Minions.Services
 
         public void Tick()
         {
-            foreach (var unit in _units.Where(u=>!u.EndPointReached))
+            foreach (var unit in _units.Where(u => !u.EndPointReached))
             {
                 unit.View.CurrentPosition += Vector3.left * unit.Speed * Time.deltaTime;
 
