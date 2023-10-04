@@ -12,4 +12,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7409313d592546cc82db107fdc2952be, type: 3}
   m_Name: EnvironmentData
   m_EditorClassIdentifier: 
-  _positions: []
+  _infos:
+  - Texture: {fileID: 2800000, guid: dbf23528e4fa33d499813ca53140feb6, type: 3}
+    Positions:
+    - {x: -2.47875, y: 2.3507617}
+    - {x: -0.11619141, y: 2.3120313}
+    - {x: 1.9236133, y: 1.5116016}
+  - Texture: {fileID: 2800000, guid: b2ba69785a0b2e344b93d64c592423a2, type: 3}
+    Positions:
+    - {x: 1.81125, y: 1.905}
+    - {x: 0.76125, y: 2.77125}
+    - {x: -1.824375, y: 1.498125}
+  - Texture: {fileID: 2800000, guid: e06b243bbf93c5145bb1c442b5059e24, type: 3}
+    Positions:
+    - {x: -2.375, y: 1.353125}
+    - {x: -1.615, y: 2.540625}
+    - {x: 1.30625, y: 2.778125}
+    - {x: 1.626875, y: 1.091875}
+  - Texture: {fileID: 2800000, guid: 8d82197f44bfd72469f0cced1b87b446, type: 3}
+    Positions:
+    - {x: -1.3860352, y: 1.820332}
+    - {x: -0.51875, y: 2.4444532}
+    - {x: 0.79433596, y: 2.2418165}
+    - {x: 1.3374023, y: 1.8284374}
+  - Texture: {fileID: 2800000, guid: 76c8db4dd1e97a84ba1a658001b2750c, type: 3}
+    Positions:
+    - {x: -2.888828, y: 1.2673438}
+    - {x: -2.047422, y: 1.8002343}
+    - {x: 0.673125, y: 2.136797}
+    - {x: 2.594336, y: 2.2489843}
+  _trunks:
+  - {fileID: 21300000, guid: dbf23528e4fa33d499813ca53140feb6, type: 3}
+  - {fileID: 21300000, guid: b2ba69785a0b2e344b93d64c592423a2, type: 3}
+  - {fileID: 21300000, guid: e06b243bbf93c5145bb1c442b5059e24, type: 3}
+  - {fileID: 21300000, guid: 8d82197f44bfd72469f0cced1b87b446, type: 3}
+  - {fileID: 21300000, guid: 76c8db4dd1e97a84ba1a658001b2750c, type: 3}
+  _crowns:
+  - {fileID: 21300000, guid: af9d622b5f235324e844b509e91b9f8a, type: 3}
+  - {fileID: 21300000, guid: 3551c02c92a26f8408bbac3a1852ae18, type: 3}
+  - {fileID: 21300000, guid: f56a06599b805024ba6eb68a485817ba, type: 3}
+  - {fileID: 21300000, guid: ad1630db2d1f0b743a6f3355316fe3da, type: 3}
+  - {fileID: 21300000, guid: 2a5dbd56ccfb9884a8932f9e6abd655e, type: 3}
+  - {fileID: 21300000, guid: f870b0c210714dd46bbe1f51ecf6fccf, type: 3}
+  - {fileID: 21300000, guid: b5cb145531724014fbefb29022fe6f43, type: 3}
+  - {fileID: 21300000, guid: 8016f097791809b4ebfb7a8f2347be99, type: 3}
+  - {fileID: 21300000, guid: aaff59b858d2862418282328ad670e43, type: 3}
+  - {fileID: 21300000, guid: e033eafafbe7a65408c5398c8817869c, type: 3}
+  - {fileID: 21300000, guid: a1a998e200a43b44c97bcee6d9782574, type: 3}

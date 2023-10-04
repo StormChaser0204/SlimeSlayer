@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.Location.SettingsFiles
+namespace Game.Environment.SettingsFiles
 {
     [System.Serializable]
     public struct LayerSettings

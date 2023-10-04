@@ -15,7 +15,7 @@ namespace Common.Environment.Editor
         private Texture _oldTargetTexture;
         private float _scale;
 
-        private Data.EnvironmentPositions _currentPositions;
+        private Data.Info _currentInfo;
 
         [MenuItem("Tools/EnvironmentBuilderWindow")]
         private static void Init()
@@ -45,8 +45,7 @@ namespace Common.Environment.Editor
             {
                 UpdateWindowDimensions();
                 _oldTargetTexture = _targetTexture;
-                var hashCode = _targetTexture.GetHashCode();
-                _currentPositions = _data.GetByIdOrCreateNew(hashCode);
+                _currentInfo = _data.GetInfoByTexture(_targetTexture);
             }
 
             DrawPreview();
@@ -105,11 +104,15 @@ namespace Common.Environment.Editor
             if (eventType != EventType.MouseDown)
                 return;
 
-            _currentPositions.Positions.Add(
+            _currentInfo.Positions.Add(
                 ConvertTextureCoordToWorldPosition(Event.current.mousePosition));
         }
 
-        private static Vector2 ConvertTextureCoordToWorldPosition(Vector2 texCoord) =>
-            new(texCoord.x / 100, texCoord.y / 100);
+        private Vector2 ConvertTextureCoordToWorldPosition(Vector2 texCoord)
+        {
+            texCoord *= _scale;
+            var halfSize = new Vector2(_targetTexture.width / 2f, _targetTexture.height / 2f);
+            return new Vector2(texCoord.x - halfSize.x, halfSize.y - texCoord.y) / 100;
+        }
     }
 }

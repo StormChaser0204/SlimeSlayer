@@ -9,34 +9,39 @@ namespace Common.Environment
     public class Data : ScriptableObject
     {
         [Serializable]
-        public class EnvironmentPositions
+        public class Info
         {
+            public Texture2D Texture;
             public List<Vector2> Positions;
 
-            private readonly int _hashCode;
-
-            public EnvironmentPositions(int hashCode)
+            public Info(Texture2D tex)
             {
-                _hashCode = hashCode;
+                Texture = tex;
                 Positions = new List<Vector2>();
             }
 
-            public bool IsEqual(int hashCode) => _hashCode == hashCode;
+            public bool IsEqual(Texture2D tex) => Texture == tex;
         }
 
-        [SerializeField] private List<EnvironmentPositions> _positions = new();
+        [SerializeField] private List<Info> _infos = new();
+        [SerializeField] private Sprite[] _trunks;
+        [SerializeField] private Sprite[] _crowns;
 
-        public EnvironmentPositions GetByIdOrCreateNew(int hashCode)
+        public Sprite GetRandomTrunkSprite() => _trunks[new System.Random().Next(0, _trunks.Length)];
+
+        public Sprite GetRandomCrownSprite() => _crowns[new System.Random().Next(0, _crowns.Length)];
+
+        public Info GetInfoByTexture(Texture2D tex)
         {
-            if (_positions.Any(p => p.IsEqual(hashCode)))
-                return GetById(hashCode);
+            if (_infos.Any(p => p.IsEqual(tex)))
+                return GetByTexture(tex);
 
-            var positions = new EnvironmentPositions(hashCode);
-            _positions.Add(positions);
-            return positions;
+            var info = new Info(tex);
+            _infos.Add(info);
+            return info;
         }
 
-        private EnvironmentPositions GetById(int hashCode) =>
-            _positions.First(p => p.IsEqual(hashCode));
+        private Info GetByTexture(Texture2D tex) =>
+            _infos.First(p => p.IsEqual(tex));
     }
 }

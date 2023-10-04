@@ -1,42 +1,39 @@
 using System.Collections.Generic;
-using Game.Location.SettingsFiles;
+using Common.Environment;
+using Game.Environment.SettingsFiles;
 using UnityEngine;
 
-namespace Game.Location
+namespace Game.Environment
 {
-    public class ParallaxScroller : MonoBehaviour
+    internal class ParallaxScroller : MonoBehaviour
     {
-        [SerializeField] private LayerElements _elements;
+        //TODO: move settings to scriptable object
+        //TODO: group all settings to one file
         [SerializeField] private LayerSettings[] _settings;
-        [SerializeField] private ElementView _prefab;
+        [SerializeField] private Data _environmentBuildData;
+        [SerializeField] private View _prefab;
         [SerializeField] private Transform _startPoint;
         [SerializeField] private Transform _endPoint;
         [SerializeField] private Transform _parent;
         [SerializeField] private float _distBetweenLayerElements;
 
-        private readonly Dictionary<int, Sprite[]> _layerElements = new();
         private readonly Dictionary<int, LayerSettings> _layerSettings = new();
 
         private int _layerCount;
-        private System.Random _rand;
-        private float[] _distLeftByLayer;
-        private EnvironmentPool _pool;
+        private float[] _distRemainedByLayer;
+        private Pool _pool;
         private SpawnedElements _spawnedElements;
 
         private void Start()
         {
             _spawnedElements = new SpawnedElements();
-            _pool = new EnvironmentPool(_prefab, _startPoint, _parent, _spawnedElements);
-
-            foreach (var layer in _elements.Layers)
-                _layerElements.Add(layer.LayerIdx, layer.Sprites);
+            _pool = new Pool(_prefab, _startPoint, _parent, _spawnedElements);
 
             for (var i = 0; i < _settings.Length; i++)
                 _layerSettings.Add(i, _settings[i]);
 
-            _layerCount = _layerSettings.Keys.Count;
-            _rand = new System.Random();
-            _distLeftByLayer = new float[_layerCount];
+            _layerCount = _settings.Length;
+            _distRemainedByLayer = new float[_layerCount];
         }
 
         public void Update()
@@ -49,31 +46,39 @@ namespace Game.Location
         {
             for (var idx = 0; idx < _layerCount; idx++)
             {
-                var dist = _distLeftByLayer[idx];
+                var dist = _distRemainedByLayer[idx];
 
                 if (dist >= 0)
                 {
-                    _distLeftByLayer[idx] = dist + PassedDistanceByLayer(idx).x;
+                    _distRemainedByLayer[idx] = dist + PassedDistanceByLayer(idx).x;
                     continue;
                 }
 
                 SpawnNewElementAtLayer(idx);
-                _distLeftByLayer[idx] = _distBetweenLayerElements / _layerSettings[idx].Density;
+                _distRemainedByLayer[idx] = _distBetweenLayerElements / _layerSettings[idx].Density;
             }
         }
 
         private void SpawnNewElementAtLayer(int idx)
         {
-            //move to pool
             var element = _pool.GetItem();
             var settings = _layerSettings[idx];
-            var variants = _layerElements[idx];
-            var sprite = variants[_rand.Next(variants.Length - 1)];
-            var color = settings.AdditionalColor;
+            var additionalLayerColor = settings.AdditionalColor;
             var tr = element.transform;
             tr.localScale = new Vector3(settings.ScaleMultiplier, settings.ScaleMultiplier, 1);
-            tr.position += new Vector3(0, settings.OffsetY, 0);
-            element.Init(sprite, idx, color);
+            tr.localPosition += new Vector3(0, settings.OffsetY, 0);
+            var mainSprite = _environmentBuildData.GetRandomTrunkSprite();
+            var positions = _environmentBuildData.GetInfoByTexture(mainSprite.texture).Positions;
+            var additionals = new AdditionalElementInfo[positions.Count];
+            for (var i = 0; i < positions.Count; i++)
+            {
+                var position = positions[i];
+                additionals[i].Position = position;
+                additionals[i].Sprite = _environmentBuildData.GetRandomCrownSprite();
+            }
+
+
+            element.Init(mainSprite, additionals, idx, additionalLayerColor);
         }
 
         private Vector3 PassedDistanceByLayer(int layer) =>
@@ -91,7 +96,7 @@ namespace Game.Location
             }
         }
 
-        private bool IsEndPointReached(ElementView view)
+        private bool IsEndPointReached(View view)
         {
             var dist = Mathf.Abs(view.CurrentPosition.x - _endPoint.position.x);
             return dist <= 0.1f;
