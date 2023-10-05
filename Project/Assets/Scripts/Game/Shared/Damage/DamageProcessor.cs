@@ -5,16 +5,17 @@ namespace Game.Shared.Damage
 {
     internal class DamageProcessor
     {
-        public Action OnKill { get; set; }
+        public Action<IDamageTaker> OnHealthChanged { get; set; }
+        public Action<IDamageTaker> OnDeath { get; set; }
 
         public void Process(IDamageDealer dealer, IDamageTaker taker)
         {
             taker.Health -= dealer.Damage;
+            OnHealthChanged.Invoke(taker);
             if (taker.Health > 0)
                 return;
 
-            taker.OnDeath.Invoke(taker);
-            OnKill.Invoke();
+            OnDeath.Invoke(taker);
         }
     }
 }

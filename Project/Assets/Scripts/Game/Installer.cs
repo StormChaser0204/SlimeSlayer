@@ -1,9 +1,9 @@
+using Game.Character.Experience;
 using Game.Character.Services;
 using Game.Minions;
 using Game.Minions.Data;
 using Game.Minions.Services;
 using Game.Shared.Damage;
-using Game.Shared.Experience;
 using UnityEngine;
 using Zenject;
 
@@ -26,7 +26,7 @@ namespace Game
         {
             InstallCharacter();
             InstallMinions();
-            InstallOther();
+            InstallShared();
         }
 
         private void InstallCharacter()
@@ -37,6 +37,8 @@ namespace Game
             Container.BindInterfacesAndSelfTo<AttackService>()
                 .AsSingle()
                 .WithArguments(_baseAttackCooldown);
+            
+            Container.Bind<ExperienceService>().AsSingle();
         }
 
         private void InstallMinions()
@@ -50,10 +52,11 @@ namespace Game
                 .WithArguments(_endPoint);
         }
 
-        private void InstallOther()
+        private void InstallShared()
         {
-            Container.Bind<DamageService>().AsSingle().WithArguments(_attackPosition);
-            Container.Bind<ExperienceService>().AsSingle();
+            Container.BindInterfacesAndSelfTo<DamageService>()
+                .AsSingle()
+                .WithArguments(_attackPosition);
         }
     }
 }

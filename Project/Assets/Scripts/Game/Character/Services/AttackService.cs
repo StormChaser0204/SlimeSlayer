@@ -1,9 +1,11 @@
 using Common;
 using Game.Shared.Damage;
+using JetBrains.Annotations;
 using Zenject;
 
 namespace Game.Character.Services
 {
+    [UsedImplicitly]
     internal class AttackService : ITickable
     {
         private readonly DamageService _damageService;

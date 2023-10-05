@@ -1,11 +1,13 @@
 using System;
 using Common;
 using Game.Minions.Data;
+using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
 
 namespace Game.Minions.Services
 {
+    [UsedImplicitly]
     internal class SpawnService : ITickable, IDisposable
     {
         private readonly SpawnedUnits _spawnedUnits;
