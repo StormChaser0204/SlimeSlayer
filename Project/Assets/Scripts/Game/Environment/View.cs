@@ -17,7 +17,7 @@ namespace Game.Environment
             Color additionalColor)
         {
             _main.sprite = main;
-            _main.color += additionalColor;
+            _main.color = additionalColor;
             _sortingGroup.sortingOrder = layerIdx;
             LayerIdx = layerIdx;
 
@@ -28,7 +28,7 @@ namespace Game.Environment
                 element.gameObject.SetActive(true);
                 element.transform.localPosition = info.Position;
                 element.sprite = info.Sprite;
-                element.color += additionalColor;
+                element.color = additionalColor;
             }
         }
 

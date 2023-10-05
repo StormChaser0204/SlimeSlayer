@@ -77,7 +77,6 @@ namespace Game.Environment
                 additionals[i].Sprite = _environmentBuildData.GetRandomCrownSprite();
             }
 
-
             element.Init(mainSprite, additionals, idx, additionalLayerColor);
         }
 
