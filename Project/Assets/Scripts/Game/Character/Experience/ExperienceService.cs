@@ -7,7 +7,7 @@ namespace Game.Character.Experience
     [UsedImplicitly]
     internal class ExperienceService
     {
-        public void AddExp(TakerDiedSignal signal)
+        public void AddExp(EnemyDiedSignal signal)
         {
             Debug.Log("Add exp");
         }

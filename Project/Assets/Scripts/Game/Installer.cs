@@ -1,9 +1,10 @@
 using Game.Character.Experience;
 using Game.Character.Services;
-using Game.Minions;
-using Game.Minions.Data;
-using Game.Minions.Services;
-using Game.Minions.Signals;
+using Game.Enemies;
+using Game.Enemies.Data;
+using Game.Enemies.Services;
+using Game.Enemies.Signals;
+using Game.Enemies.Spawn;
 using Game.Shared.Damage;
 using Game.Shared.Damage.Signals;
 using Game.Shared.UI.Services;
@@ -17,10 +18,12 @@ namespace Game
     {
         [SerializeField] private float _baseCharacterSpeed;
         [SerializeField] private float _baseAttackCooldown;
+
         [Space] [SerializeField] private float _spawnTime;
         [SerializeField] private Transform _spawnPoint;
         [SerializeField] private Transform _endPoint;
-        [SerializeField] private View _testView;
+        [SerializeField] private View _enemyView;
+
         [Space] [SerializeField] private Transform _attackPosition;
         [Space] [SerializeField] private HealthBar _healthBarPrefab;
         [SerializeField] private Transform _healthBarParent;
@@ -39,9 +42,9 @@ namespace Game
 
         private void DeclareSignals()
         {
-            Container.DeclareSignal<TakerDiedSignal>();
+            Container.DeclareSignal<EnemyDiedSignal>();
             Container.DeclareSignal<HealthChangedSignal>();
-            Container.DeclareSignal<SpawnMinionSignal>();
+            Container.DeclareSignal<SpawnEnemySignal>();
         }
 
         private void InstallCharacter()
@@ -55,21 +58,24 @@ namespace Game
 
             Container.Bind<ExperienceService>().AsSingle();
 
-            Container.BindSignal<TakerDiedSignal>()
+            Container.BindSignal<EnemyDiedSignal>()
                 .ToMethod<ExperienceService>(x => x.AddExp).FromResolve();
         }
 
         private void InstallMinions()
         {
-            Container.Bind<SpawnedUnits>().AsSingle();
+            Container.BindFactory<View, ViewFactory>().FromComponentInNewPrefab(_enemyView);
+            Container.BindFactory<Model, Factory>().FromPoolableMemoryPool(x => x.WithInitialSize(1).FromFactory<CustomFactory>());
+
+            Container.Bind<ActiveEnemies>().AsSingle();
             Container.BindInterfacesAndSelfTo<SpawnService>()
                 .AsSingle()
-                .WithArguments(_spawnPoint, _spawnTime, _testView);
+                .WithArguments(_spawnPoint, _spawnTime);
             Container.BindInterfacesAndSelfTo<MinionsMovementService>()
                 .AsSingle()
                 .WithArguments(_endPoint);
 
-            Container.BindSignal<TakerDiedSignal>()
+            Container.BindSignal<EnemyDiedSignal>()
                 .ToMethod<SpawnService>(x => x.ReturnToPool)
                 .FromResolve();
         }
@@ -87,16 +93,16 @@ namespace Game
                 .AsSingle()
                 .WithArguments(_healthBarPrefab, _healthBarParent);
 
-            Container.BindSignal<SpawnMinionSignal>()
+            Container.BindSignal<SpawnEnemySignal>()
                 .ToMethod<HealthService>(x => x.InstantiateNewBar)
                 .FromResolve();
 
-            Container.BindSignal<TakerDiedSignal>()
+            Container.BindSignal<EnemyDiedSignal>()
                 .ToMethod<HealthService>(x => x.ReturnBar)
                 .FromResolve();
 
             Container.BindSignal<HealthChangedSignal>()
-                .ToMethod<HealthService>(x => x.UpdateHealth)
+                .ToMethod<HealthService>(x => x.UpdateHealthBar)
                 .FromResolve();
         }
     }

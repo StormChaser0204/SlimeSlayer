@@ -1,4 +1,4 @@
-namespace Game.Minions.Data
+namespace Game.Enemies.Data
 {
     internal enum Type
     {

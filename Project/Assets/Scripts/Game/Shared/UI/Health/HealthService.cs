@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Game.Minions.Signals;
-using Game.Shared.Damage.Components;
+using Game.Enemies.Data;
+using Game.Enemies.Signals;
 using Game.Shared.Damage.Signals;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -15,7 +15,7 @@ namespace Game.Shared.UI.Services
         private readonly Transform _parent;
 
         private Vector2 _offset;
-        private readonly Dictionary<IDamageTaker, HealthBar> _instancedBars = new();
+        private readonly Dictionary<Model, HealthBar> _instancedBars = new();
 
         public HealthService(HealthBar prefab, Transform parent)
         {
@@ -23,40 +23,40 @@ namespace Game.Shared.UI.Services
             _parent = parent;
         }
 
-        public void InstantiateNewBar(SpawnMinionSignal signal)
+        public void Tick()
         {
-            if (_instancedBars.ContainsKey(signal.Model.DamageTaker))
+            foreach (var instancedBar in _instancedBars)
+                instancedBar.Value.UpdatePosition();
+        }
+
+        public void InstantiateNewBar(SpawnEnemySignal signal)
+        {
+            if (_instancedBars.ContainsKey(signal.Model))
             {
-                Reset(signal.Model.DamageTaker);
+                Reset(signal.Model);
                 return;
             }
 
             var bar = Object.Instantiate(_prefab, _parent);
             bar.SetChasedTarget(signal.Model.View.transform);
-            _instancedBars.Add(signal.Model.DamageTaker, bar);
+            _instancedBars.Add(signal.Model, bar);
         }
 
-        private void Reset(IDamageTaker modelDamageTaker)
+        private void Reset(Model model)
         {
-            var bar = _instancedBars[modelDamageTaker];
+            var bar = _instancedBars[model];
             bar.gameObject.SetActive(true);
             bar.UpdateValue(1);
         }
 
-        public void ReturnBar(TakerDiedSignal signal) =>
-            _instancedBars[signal.Taker].gameObject.SetActive(false);
+        public void ReturnBar(EnemyDiedSignal signal) =>
+            _instancedBars[signal.Model].gameObject.SetActive(false);
 
-        public void UpdateHealth(HealthChangedSignal signal)
+        public void UpdateHealthBar(HealthChangedSignal signal)
         {
-            var taker = signal.Taker;
-            var hp = (float) taker.Health / taker.MaxHealth;
-            _instancedBars[taker].UpdateValue(hp);
-        }
-
-        public void Tick()
-        {
-            foreach (var instancedBar in _instancedBars)
-                instancedBar.Value.UpdatePosition();
+            var model = signal.Model;
+            var hp = model.Health / model.MaxHealth;
+            _instancedBars[signal.Model].UpdateValue(hp);
         }
     }
 }

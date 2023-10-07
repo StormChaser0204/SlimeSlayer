@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Minions
+namespace Game.Enemies
 {
     internal class View : MonoBehaviour
     {

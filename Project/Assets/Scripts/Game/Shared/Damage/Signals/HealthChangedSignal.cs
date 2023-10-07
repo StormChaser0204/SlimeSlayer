@@ -1,11 +1,12 @@
-﻿using Game.Shared.Damage.Components;
+﻿using Game.Enemies.Data;
+using Game.Shared.Damage.Components;
 
 namespace Game.Shared.Damage.Signals
 {
     internal class HealthChangedSignal
     {
-        public readonly IDamageTaker Taker;
+        public readonly Model Model;
 
-        public HealthChangedSignal(IDamageTaker taker) => Taker = taker;
+        public HealthChangedSignal(Model model) => Model = model;
     }
 }

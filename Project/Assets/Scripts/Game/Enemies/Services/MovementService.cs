@@ -1,23 +1,23 @@
 using System;
 using System.Linq;
-using Game.Minions.Data;
+using Game.Enemies.Data;
 using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Minions.Services
+namespace Game.Enemies.Services
 {
     [UsedImplicitly]
     internal class MinionsMovementService : ITickable
     {
-        private readonly SpawnedUnits _units;
+        private readonly ActiveEnemies _units;
         private readonly float _endPointPointPosition;
 
         public Action<Model> OnEndPointReached;
 
-        public MinionsMovementService(SpawnedUnits spawnedUnits, Transform endPoint)
+        public MinionsMovementService(ActiveEnemies activeEnemies, Transform endPoint)
         {
-            _units = spawnedUnits;
+            _units = activeEnemies;
             _endPointPointPosition = endPoint.position.x;
         }
 

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
 
-namespace Game.Minions.Data
+namespace Game.Enemies.Data
 {
     [UsedImplicitly]
-    internal class SpawnedUnits : List<Model>
+    internal class ActiveEnemies : List<Model>
     {
     }
 }
