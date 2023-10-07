@@ -8,7 +8,7 @@ namespace Game.Environment
         [SerializeField] private SpriteRenderer _main;
         [SerializeField] private SpriteRenderer[] _elements;
         [SerializeField] private SortingGroup _sortingGroup;
-
+        
         public int LayerIdx { get; private set; }
 
         public Vector2 CurrentPosition => transform.position;

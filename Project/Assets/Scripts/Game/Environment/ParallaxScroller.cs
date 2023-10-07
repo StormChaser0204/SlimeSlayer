@@ -88,7 +88,7 @@ namespace Game.Environment
             foreach (var element in _spawnedElements)
             {
                 element.transform.position += PassedDistanceByLayer(element.LayerIdx);
-                if (!IsEndPointReached(element))
+                if (!IsEndPointReached(element) || !element.gameObject.activeInHierarchy)
                     continue;
 
                 _pool.ReturnToPool(element);

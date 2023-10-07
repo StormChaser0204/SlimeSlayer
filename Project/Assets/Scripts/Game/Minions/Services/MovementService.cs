@@ -13,7 +13,7 @@ namespace Game.Minions.Services
         private readonly SpawnedUnits _units;
         private readonly float _endPointPointPosition;
 
-        public Action<MinionModel> OnEndPointReached;
+        public Action<Model> OnEndPointReached;
 
         public MinionsMovementService(SpawnedUnits spawnedUnits, Transform endPoint)
         {
@@ -35,7 +35,7 @@ namespace Game.Minions.Services
         private bool IsReached(Vector3 currentPosition) =>
             currentPosition.x <= _endPointPointPosition;
 
-        private void FinishMovement(MinionModel minion)
+        private void FinishMovement(Model minion)
         {
             minion.EndPointReached = true;
             //OnEndPointReached.Invoke(minion);

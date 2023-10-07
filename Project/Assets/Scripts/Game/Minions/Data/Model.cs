@@ -2,17 +2,19 @@ using Game.Shared.Damage.Components;
 
 namespace Game.Minions.Data
 {
-    internal class MinionModel
+    internal class Model
     {
-        public MinionView View;
+        public View View;
+        public Type Type;
         public float Damage;
         public IDamageTaker DamageTaker;
         public float Speed;
         public bool EndPointReached;
 
-        public MinionModel(MinionView view, float damage, IDamageTaker damageTaker, float speed)
+        public Model(View view, Type type, float damage, IDamageTaker damageTaker, float speed)
         {
             View = view;
+            Type = type;
             Damage = damage;
             DamageTaker = damageTaker;
             Speed = speed;

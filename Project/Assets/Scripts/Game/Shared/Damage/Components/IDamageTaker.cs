@@ -1,7 +1,8 @@
 namespace Game.Shared.Damage.Components
 {
-    public interface IDamageTaker
+    internal interface IDamageTaker
     {
+        public int MaxHealth { get; set; }
         public int Health { get; set; }
     }
 }

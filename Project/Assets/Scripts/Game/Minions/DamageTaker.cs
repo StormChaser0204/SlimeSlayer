@@ -1,20 +1,16 @@
-using System;
 using Game.Shared.Damage.Components;
 
 namespace Game.Minions
 {
     internal class DamageTaker : IDamageTaker
     {
+        public int MaxHealth { get; set; }
         public int Health { get; set; }
-        //{
-        //    get => _health;
-        //    set
-        //    {
-        //        _health = value;
-        //        if (_health <= 0)
-        //            OnDeath.Invoke(this);
-        //    }
-        //}
-        public Action<IDamageTaker> OnDeath { get; set; }
+
+        public DamageTaker(int maxHealth)
+        {
+            MaxHealth = maxHealth;
+            Health = maxHealth;
+        }
     }
 }

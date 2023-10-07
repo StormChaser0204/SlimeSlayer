@@ -32,7 +32,7 @@ namespace Game.Shared.Damage
 
         public void CharacterAttack(IDamageDealer damageDealer, float range)
         {
-            var targets = new List<MinionModel>(_spawnedUnits);
+            var targets = new List<Model>(_spawnedUnits);
 
             foreach (var unit in targets)
             {

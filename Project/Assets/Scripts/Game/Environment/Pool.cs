@@ -29,11 +29,7 @@ namespace Game.Environment
             return inst;
         }
 
-        public void ReturnToPool(View view)
-        {
-            _pool.Release(view);
-            _spawnedElements.Remove(view);
-        }
+        public void ReturnToPool(View view) => _pool.Release(view);
 
         private View CreateItem()
         {

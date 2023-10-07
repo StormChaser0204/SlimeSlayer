@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace Game.Minions.Data
 {
     [UsedImplicitly]
-    internal class SpawnedUnits : List<MinionModel>
+    internal class SpawnedUnits : List<Model>
     {
     }
 }

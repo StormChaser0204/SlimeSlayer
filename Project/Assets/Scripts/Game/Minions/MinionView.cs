@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game.Minions
 {
-    internal class MinionView : MonoBehaviour
+    internal class View : MonoBehaviour
     {
         public Vector3 CurrentPosition
         {

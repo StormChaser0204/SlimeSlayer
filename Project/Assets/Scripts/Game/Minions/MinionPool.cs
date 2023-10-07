@@ -6,61 +6,62 @@ using UnityEngine.Pool;
 
 namespace Game.Minions
 {
+    //TODO: Remake this pool. Need to use something good instead of unity pool.
     internal class MinionPool
     {
         private readonly SpawnedUnits _spawnedUnits;
-        private readonly ObjectPool<MinionModel> _pool;
-        private readonly MinionView _prefab;
+        private readonly ObjectPool<Model> _pool;
+        private readonly View _prefab;
         private readonly Vector3 _spawnPoint;
 
-        public MinionPool(MinionView prefab, Transform spawnPoint, SpawnedUnits spawnedUnits)
+        public MinionPool(View prefab, Transform spawnPoint, SpawnedUnits spawnedUnits)
         {
             _spawnedUnits = spawnedUnits;
             _prefab = prefab;
             _spawnPoint = spawnPoint.position;
-            _pool = new ObjectPool<MinionModel>(CreateItem, OnTakeFromPool, OnReturnedToPool,
+            _pool = new ObjectPool<Model>(CreateItem, OnTakeFromPool, OnReturnedToPool,
                 OnDestroyPoolObject, true, 50, 100);
         }
 
-        public void GetItem()
+        public Model GetItem()
         {
             var inst = _pool.Get();
             _spawnedUnits.Add(inst);
+            return inst;
         }
 
-        private void ReturnToPool(IDamageTaker damageTaker)
+        public void ReturnToPool(IDamageTaker damageTaker)
         {
             var model = _spawnedUnits.First(i => i.DamageTaker == damageTaker);
             ReturnItem(model);
         }
 
-        private void ReturnItem(MinionModel model)
+        private void ReturnItem(Model model)
         {
             _pool.Release(model);
             _spawnedUnits.Remove(model);
         }
 
-        private MinionModel CreateItem()
+        private Model CreateItem()
         {
             var view = Object.Instantiate(_prefab);
-            var damageTaker = new DamageTaker();
-            var model = new MinionModel(view, 1, damageTaker, 1);
+            var damageTaker = new DamageTaker(3);
+            var model = new Model(view, Type.Small, 1, damageTaker, 1);
             view.CurrentPosition = _spawnPoint;
-            damageTaker.OnDeath += ReturnToPool;
             return model;
         }
 
-        private void OnTakeFromPool(MinionModel model)
+        private void OnTakeFromPool(Model model)
         {
             model.View.gameObject.SetActive(true);
             model.View.transform.position = _spawnPoint;
-            model.DamageTaker.Health = 1;
+            model.DamageTaker.Health = model.DamageTaker.MaxHealth;
         }
 
-        private static void OnReturnedToPool(MinionModel model) =>
+        private static void OnReturnedToPool(Model model) =>
             model.View.gameObject.SetActive(false);
 
-        private static void OnDestroyPoolObject(MinionModel model) =>
+        private static void OnDestroyPoolObject(Model model) =>
             Object.Destroy(model.View.gameObject);
     }
 }
