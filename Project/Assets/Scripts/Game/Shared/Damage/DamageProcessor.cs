@@ -1,20 +1,21 @@
 using System;
-using Game.Shared.Damage.Components;
+using Game.Enemies.Data;
 
 namespace Game.Shared.Damage
 {
     internal class DamageProcessor
     {
-        public Action OnKill { get; set; }
+        public Action<Model> OnHealthChanged { get; set; }
+        public Action<Model> OnDeath { get; set; }
 
-        public void Process(IDamageDealer dealer, IDamageTaker taker)
+        public void Process(int damage, Model model)
         {
-            taker.Health -= dealer.Damage;
-            if (taker.Health > 0)
+            model.Health -= damage;
+            OnHealthChanged.Invoke(model);
+            if (model.Health > 0)
                 return;
 
-            taker.OnDeath.Invoke(taker);
-            OnKill.Invoke();
+            OnDeath.Invoke(model);
         }
     }
 }

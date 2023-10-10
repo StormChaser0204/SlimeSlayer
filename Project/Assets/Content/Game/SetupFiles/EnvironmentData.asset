@@ -12,4 +12,52 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7409313d592546cc82db107fdc2952be, type: 3}
   m_Name: EnvironmentData
   m_EditorClassIdentifier: 
-  _positions: []
+  _infos:
+  - Texture: {fileID: 2800000, guid: dbf23528e4fa33d499813ca53140feb6, type: 3}
+    Positions:
+    - {x: -3.0080664, y: 2.7380664}
+    - {x: 2.4658399, y: 1.963457}
+    - {x: 0.0129101565, y: 2.3765821}
+  - Texture: {fileID: 2800000, guid: b2ba69785a0b2e344b93d64c592423a2, type: 3}
+    Positions:
+    - {x: -2.874375, y: 1.4325}
+    - {x: -1.456875, y: 1.970625}
+    - {x: 0.84, y: 2.92875}
+    - {x: 2.205, y: 2.19375}
+  - Texture: {fileID: 2800000, guid: e06b243bbf93c5145bb1c442b5059e24, type: 3}
+    Positions:
+    - {x: -2.458125, y: 1.365}
+    - {x: -1.7575, y: 2.896875}
+    - {x: 1.805, y: 3.36}
+    - {x: 2.25625, y: 1.638125}
+  - Texture: {fileID: 2800000, guid: 8d82197f44bfd72469f0cced1b87b446, type: 3}
+    Positions:
+    - {x: -1.710254, y: 2.2985547}
+    - {x: -0.5430664, y: 2.752461}
+    - {x: 0.84296876, y: 2.4930859}
+    - {x: 1.6616211, y: 2.1526563}
+  - Texture: {fileID: 2800000, guid: 76c8db4dd1e97a84ba1a658001b2750c, type: 3}
+    Positions:
+    - {x: -3.4357421, y: 2.0666797}
+    - {x: -2.6504297, y: 2.487383}
+    - {x: 2.9869921, y: 2.936133}
+    - {x: 1.2060156, y: 3.1745312}
+    - {x: -0.57496095, y: 2.8519921}
+  _trunks:
+  - {fileID: 21300000, guid: dbf23528e4fa33d499813ca53140feb6, type: 3}
+  - {fileID: 21300000, guid: b2ba69785a0b2e344b93d64c592423a2, type: 3}
+  - {fileID: 21300000, guid: e06b243bbf93c5145bb1c442b5059e24, type: 3}
+  - {fileID: 21300000, guid: 8d82197f44bfd72469f0cced1b87b446, type: 3}
+  - {fileID: 21300000, guid: 76c8db4dd1e97a84ba1a658001b2750c, type: 3}
+  _crowns:
+  - {fileID: 21300000, guid: af9d622b5f235324e844b509e91b9f8a, type: 3}
+  - {fileID: 21300000, guid: 3551c02c92a26f8408bbac3a1852ae18, type: 3}
+  - {fileID: 21300000, guid: f56a06599b805024ba6eb68a485817ba, type: 3}
+  - {fileID: 21300000, guid: ad1630db2d1f0b743a6f3355316fe3da, type: 3}
+  - {fileID: 21300000, guid: 2a5dbd56ccfb9884a8932f9e6abd655e, type: 3}
+  - {fileID: 21300000, guid: f870b0c210714dd46bbe1f51ecf6fccf, type: 3}
+  - {fileID: 21300000, guid: b5cb145531724014fbefb29022fe6f43, type: 3}
+  - {fileID: 21300000, guid: 8016f097791809b4ebfb7a8f2347be99, type: 3}
+  - {fileID: 21300000, guid: aaff59b858d2862418282328ad670e43, type: 3}
+  - {fileID: 21300000, guid: e033eafafbe7a65408c5398c8817869c, type: 3}
+  - {fileID: 21300000, guid: a1a998e200a43b44c97bcee6d9782574, type: 3}

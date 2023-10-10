@@ -1,12 +1,14 @@
-using Game.Shared.Services;
+using JetBrains.Annotations;
+using Zenject;
 
 namespace Game.Character.Services
 {
-    internal class MovementService : ITickable
+    [UsedImplicitly]
+    internal class CharacterMovementService : ITickable
     {
         private readonly float _speed;
 
-        public MovementService(float speed) => _speed = speed;
+        public CharacterMovementService(float speed) => _speed = speed;
 
         public void Tick()
         {
