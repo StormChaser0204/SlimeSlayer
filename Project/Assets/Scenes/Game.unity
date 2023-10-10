@@ -968,7 +968,7 @@ MonoBehaviour:
   _spawnTime: 5
   _spawnPoint: {fileID: 1695022276}
   _endPoint: {fileID: 985812911}
-  _testView: {fileID: 2493166981588610320, guid: b704a8fff199ed5459120a45a9df395d, type: 3}
+  _enemyView: {fileID: 2493166981588610320, guid: b704a8fff199ed5459120a45a9df395d, type: 3}
   _attackPosition: {fileID: 985812911}
   _healthBarPrefab: {fileID: -1759619329586041326, guid: 933b6c6a86a57db41a14adfaf6f38720, type: 3}
   _healthBarParent: {fileID: 1486778339}
