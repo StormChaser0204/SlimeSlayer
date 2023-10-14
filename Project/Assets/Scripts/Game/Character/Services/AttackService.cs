@@ -1,12 +1,11 @@
 using Common;
 using Game.Shared.Damage;
 using JetBrains.Annotations;
-using Zenject;
 
 namespace Game.Character.Services
 {
     [UsedImplicitly]
-    internal class AttackService : ITickable
+    internal class AttackService
     {
         private readonly DamageService _damageService;
         private readonly DamageDealer _damageDealer;
@@ -16,11 +15,8 @@ namespace Game.Character.Services
         {
             _damageService = damageService;
             _damageDealer = new DamageDealer(1);
-            _attack = new RepeatableAction(baseAttackCooldown, Attack);
         }
 
-        public void Tick() => _attack.Update();
-
-        private void Attack() => _damageService.CharacterAttack(_damageDealer, 2);
+        public void Attack() => _damageService.CharacterAttack(_damageDealer, 2);
     }
 }

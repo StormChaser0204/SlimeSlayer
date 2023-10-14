@@ -36,7 +36,7 @@ namespace Game.Enemies.Services
             var model = _factory.Create();
             model.SetViewActiveState(true);
             model.View.transform.position = _spawnPoint;
-            model.Init(Data.Type.Small, 1, 3, 1);
+            model.Init(Data.Type.Small, 1, 3, 2);
             _activeEnemies.Add(model);
             _signalBus.Fire(new SpawnEnemySignal(model));
         }

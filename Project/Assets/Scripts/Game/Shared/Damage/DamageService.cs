@@ -42,20 +42,14 @@ namespace Game.Shared.Damage
             }
         }
 
-        public void MinionAttack(int damage)
+        public void EnemyAttack(int damage)
         {
         }
 
-        private void ChangeHealth(Model model)
-        {
-            //fire health changed signal
-
-            _signalBus.Fire(new HealthChangedSignal(model));
-            //на него подпишеться "UI Service" который будет обновлять вью ХП
-        }
+        private void ChangeHealth(Model model) => _signalBus.Fire(new HealthChangedSignal(model));
 
         private void Death(Model model) => _signalBus.Fire(new EnemyDiedSignal(model));
-
+        
         public void Dispose()
         {
         }

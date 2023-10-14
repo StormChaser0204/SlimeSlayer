@@ -8,14 +8,14 @@ using Zenject;
 namespace Game.Enemies.Services
 {
     [UsedImplicitly]
-    internal class MinionsMovementService : ITickable
+    internal class EnemiesMovementService : ITickable
     {
         private readonly ActiveEnemies _units;
         private readonly float _endPointPointPosition;
 
         public Action<Model> OnEndPointReached;
 
-        public MinionsMovementService(ActiveEnemies activeEnemies, Transform endPoint)
+        public EnemiesMovementService(ActiveEnemies activeEnemies, Transform endPoint)
         {
             _units = activeEnemies;
             _endPointPointPosition = endPoint.position.x;
@@ -26,7 +26,8 @@ namespace Game.Enemies.Services
             foreach (var unit in _units.Where(u => !u.EndPointReached))
             {
                 unit.View.CurrentPosition += Vector3.left * unit.Speed * Time.deltaTime;
-
+                
+                
                 if (IsReached(unit.View.CurrentPosition))
                     FinishMovement(unit);
             }

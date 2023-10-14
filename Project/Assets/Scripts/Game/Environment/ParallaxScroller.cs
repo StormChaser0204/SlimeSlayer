@@ -16,6 +16,7 @@ namespace Game.Environment
         [SerializeField] private Transform _endPoint;
         [SerializeField] private Transform _parent;
         [SerializeField] private float _distBetweenLayerElements;
+        [SerializeField] private float _baseSpeed;
 
         private readonly Dictionary<int, LayerSettings> _layerSettings = new();
 
@@ -40,6 +41,24 @@ namespace Game.Environment
         {
             MoveActiveElements();
             CheckForNewElement();
+        }
+
+        private void MoveActiveElements()
+        {
+            foreach (var element in _spawnedElements)
+            {
+                element.transform.position += PassedDistanceByLayer(element.LayerIdx);
+                if (!IsEndPointReached(element) || !element.gameObject.activeInHierarchy)
+                    continue;
+
+                _pool.ReturnToPool(element);
+            }
+        }
+
+        private bool IsEndPointReached(View view)
+        {
+            var dist = Mathf.Abs(view.CurrentPosition.x - _endPoint.position.x);
+            return dist <= 0.1f;
         }
 
         private void CheckForNewElement()
@@ -81,24 +100,6 @@ namespace Game.Environment
         }
 
         private Vector3 PassedDistanceByLayer(int layer) =>
-            Vector3.left * _layerSettings[layer].SpeedMultiplier * Time.deltaTime;
-
-        private void MoveActiveElements()
-        {
-            foreach (var element in _spawnedElements)
-            {
-                element.transform.position += PassedDistanceByLayer(element.LayerIdx);
-                if (!IsEndPointReached(element) || !element.gameObject.activeInHierarchy)
-                    continue;
-
-                _pool.ReturnToPool(element);
-            }
-        }
-
-        private bool IsEndPointReached(View view)
-        {
-            var dist = Mathf.Abs(view.CurrentPosition.x - _endPoint.position.x);
-            return dist <= 0.1f;
-        }
+            Vector3.left * _baseSpeed * _layerSettings[layer].SpeedMultiplier * Time.deltaTime;
     }
 }

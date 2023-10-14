@@ -22,12 +22,7 @@ namespace Game.Environment
                 OnDestroyPoolObject, true, 50, 100);
         }
 
-        public View GetItem()
-        {
-            var inst = _pool.Get();
-            _spawnedElements.Add(inst);
-            return inst;
-        }
+        public View GetItem() => _pool.Get();
 
         public void ReturnToPool(View view) => _pool.Release(view);
 
@@ -35,6 +30,7 @@ namespace Game.Environment
         {
             var view = Object.Instantiate(_prefab, _parent, true);
             view.transform.localPosition = new Vector2(_spawnPoint.x, 0);
+            _spawnedElements.Add(view);
             return view;
         }
 

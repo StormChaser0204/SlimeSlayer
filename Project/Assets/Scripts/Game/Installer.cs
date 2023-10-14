@@ -1,5 +1,6 @@
 using Game.Character.Experience;
 using Game.Character.Services;
+using Game.Character.Signals;
 using Game.Enemies;
 using Game.Enemies.Data;
 using Game.Enemies.Services;
@@ -35,7 +36,7 @@ namespace Game
             DeclareSignals();
 
             InstallCharacter();
-            InstallMinions();
+            InstallEnemies();
             InstallShared();
             InstallUI();
         }
@@ -45,33 +46,40 @@ namespace Game
             Container.DeclareSignal<EnemyDiedSignal>();
             Container.DeclareSignal<HealthChangedSignal>();
             Container.DeclareSignal<SpawnEnemySignal>();
+
+            Container.DeclareSignal<AttackSignal>();
+            Container.DeclareSignal<BlockSignal>();
         }
 
         private void InstallCharacter()
         {
-            Container.BindInterfacesTo<CharacterMovementService>()
-                .AsSingle()
+            Container.BindInterfacesTo<CharacterMovementService>().AsSingle()
                 .WithArguments(_baseCharacterSpeed);
-            Container.BindInterfacesAndSelfTo<AttackService>()
-                .AsSingle()
+
+            Container.BindInterfacesAndSelfTo<AttackService>().AsSingle()
                 .WithArguments(_baseAttackCooldown);
 
             Container.Bind<ExperienceService>().AsSingle();
 
+            Container.BindSignal<AttackSignal>()
+                .ToMethod<AttackService>(x => x.Attack)
+                .FromResolve();
             Container.BindSignal<EnemyDiedSignal>()
-                .ToMethod<ExperienceService>(x => x.AddExp).FromResolve();
+                .ToMethod<ExperienceService>(x => x.AddExp)
+                .FromResolve();
         }
 
-        private void InstallMinions()
+        private void InstallEnemies()
         {
             Container.BindFactory<View, ViewFactory>().FromComponentInNewPrefab(_enemyView);
-            Container.BindFactory<Model, Factory>().FromPoolableMemoryPool(x => x.WithInitialSize(1).FromFactory<CustomFactory>());
+            Container.BindFactory<Model, Factory>()
+                .FromPoolableMemoryPool(x => x.WithInitialSize(1).FromFactory<CustomFactory>());
 
             Container.Bind<ActiveEnemies>().AsSingle();
             Container.BindInterfacesAndSelfTo<SpawnService>()
                 .AsSingle()
                 .WithArguments(_spawnPoint, _spawnTime);
-            Container.BindInterfacesAndSelfTo<MinionsMovementService>()
+            Container.BindInterfacesAndSelfTo<EnemiesMovementService>()
                 .AsSingle()
                 .WithArguments(_endPoint);
 
