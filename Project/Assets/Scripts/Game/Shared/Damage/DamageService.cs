@@ -1,6 +1,5 @@
 using System;
 using Game.Enemies.Data;
-using Game.Shared.Damage.Components;
 using Game.Shared.Damage.Signals;
 using JetBrains.Annotations;
 using UnityEngine;
@@ -29,7 +28,7 @@ namespace Game.Shared.Damage
             _signalBus = signalBus;
         }
 
-        public void CharacterAttack(IDamageDealer damageDealer, float range)
+        public void CharacterAttack(float damage, float range)
         {
             for (var i = 0; i < _activeEnemies.Count; i++)
             {
@@ -38,7 +37,7 @@ namespace Game.Shared.Damage
                 if (distance > range)
                     continue;
 
-                _damageProcessor.Process(damageDealer.Damage, enemy);
+                _damageProcessor.Process(damage, enemy);
             }
         }
 

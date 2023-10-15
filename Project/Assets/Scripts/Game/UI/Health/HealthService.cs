@@ -6,7 +6,7 @@ using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Shared.UI.Services
+namespace Game.UI.Health
 {
     [UsedImplicitly]
     internal class HealthService : ITickable

@@ -8,7 +8,7 @@ namespace Game.Shared.Damage
         public Action<Model> OnHealthChanged { get; set; }
         public Action<Model> OnDeath { get; set; }
 
-        public void Process(int damage, Model model)
+        public void Process(float damage, Model model)
         {
             model.Health -= damage;
             OnHealthChanged.Invoke(model);

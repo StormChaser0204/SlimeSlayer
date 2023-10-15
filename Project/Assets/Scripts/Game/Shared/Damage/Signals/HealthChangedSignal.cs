@@ -1,5 +1,4 @@
 ﻿using Game.Enemies.Data;
-using Game.Shared.Damage.Components;
 
 namespace Game.Shared.Damage.Signals
 {

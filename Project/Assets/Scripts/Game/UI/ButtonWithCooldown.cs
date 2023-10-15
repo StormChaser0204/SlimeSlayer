@@ -3,31 +3,34 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
-internal class ButtonWithCooldown : MonoBehaviour
+namespace Game.UI
 {
-    [SerializeField] private Button _button;
-    [SerializeField] private Image _cooldownImage;
-
-    public Action OnClick;
-
-    public void Click() => OnClick.Invoke();
-
-    public IEnumerator Cooldown(float duration)
+    internal class ButtonWithCooldown : MonoBehaviour
     {
-        var currentTime = duration;
+        [SerializeField] private Button _button;
+        [SerializeField] private Image _cooldownImage;
 
-        SetButtonInteractableState(false);
-        var wff = new WaitForEndOfFrame();
+        public Action OnClick;
 
-        while (currentTime >= 0)
+        public void Click() => OnClick.Invoke();
+
+        public IEnumerator Cooldown(float duration)
         {
-            currentTime -= Time.deltaTime;
-            _cooldownImage.fillAmount = currentTime / duration;
-            yield return wff;
+            var currentTime = duration;
+
+            SetButtonInteractableState(false);
+            var wff = new WaitForEndOfFrame();
+
+            while (currentTime >= 0)
+            {
+                currentTime -= Time.deltaTime;
+                _cooldownImage.fillAmount = currentTime / duration;
+                yield return wff;
+            }
+
+            SetButtonInteractableState(true);
         }
 
-        SetButtonInteractableState(true);
+        private void SetButtonInteractableState(bool isOn) => _button.interactable = isOn;
     }
-
-    private void SetButtonInteractableState(bool isOn) => _button.interactable = isOn;
 }
