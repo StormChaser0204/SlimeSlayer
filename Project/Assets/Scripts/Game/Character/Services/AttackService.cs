@@ -1,5 +1,4 @@
 using Common;
-using Game.Shared.Damage;
 using JetBrains.Annotations;
 
 namespace Game.Character.Services
@@ -8,17 +7,18 @@ namespace Game.Character.Services
     internal class AttackService
     {
         private readonly DamageService _damageService;
-        private readonly Stats _stats;
+        private readonly CharacterStats _characterStats;
         private readonly RepeatableAction _attack;
 
-        public AttackService(DamageService damageService, float baseAttackCooldown)
+        public AttackService(DamageService damageService, CharacterStats stats,
+            float baseAttackCooldown)
         {
             _damageService = damageService;
-            _stats = new Stats(1);
+            _characterStats = stats;
         }
 
-        public void Attack() => _damageService.CharacterAttack(_stats.Damage, 2);
+        public void Attack() => _damageService.Attack(_characterStats.Damage, 2);
 
-        public void IncreaseDamage() => _stats.UpdateDamage(2);
+        public void IncreaseDamage() => _characterStats.UpdateDamage(2);
     }
 }

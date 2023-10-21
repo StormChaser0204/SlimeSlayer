@@ -1,4 +1,6 @@
 using Game.Character.Signals;
+using Game.Enemies.Signals;
+using Game.UI.Health;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,13 +16,17 @@ namespace Game.UI
         [SerializeField] private ButtonWithCooldown _blockBtn;
         [SerializeField] private float _attackCooldown;
         [SerializeField] private float _blockCooldown;
+        [SerializeField] private HealthBar _healthBar;
+        [SerializeField] private Transform _characterTransform;
 
         [Inject] private SignalBus _signalBus;
 
-        public void Init(int currentLevel, int nextLevelExpAmount)
+        public void Init(int currentLevel, int nextLevelExpAmount, Camera mainCamera)
         {
             _levelProgress.maxValue = nextLevelExpAmount;
             _currentLevelLabel.text = $"{currentLevel}lvl";
+            _healthBar.Init(_characterTransform, mainCamera);
+            _healthBar.UpdatePosition();
         }
 
         private void Start()
@@ -41,14 +47,17 @@ namespace Game.UI
             StartCoroutine(_blockBtn.Cooldown(_blockCooldown));
         }
 
-        public void SetNewLevelProgress(LevelUpSignal levelUpSignal)
+        public void SetNewLevelProgress(LevelUpSignal signal)
         {
-            _levelProgress.minValue = levelUpSignal.CurrentLevelExpAmount;
-            _levelProgress.maxValue = levelUpSignal.NextLevelExpAmount;
-            _currentLevelLabel.text = $"{levelUpSignal.CurrentLevel}lvl";
+            _levelProgress.minValue = signal.CurrentLevelExpAmount;
+            _levelProgress.maxValue = signal.NextLevelExpAmount;
+            _currentLevelLabel.text = $"{signal.CurrentLevel}lvl";
         }
 
-        public void UpdateProgress(ExperienceChangedSignal experienceChangedSignal) =>
-            _levelProgress.value = experienceChangedSignal.Current;
+        public void UpdateProgress(ExperienceChangedSignal signal) =>
+            _levelProgress.value = signal.Current;
+
+        public void UpdateHealth(CharacterHealthChangedSignal signal) =>
+            _healthBar.UpdateValue((float) signal.NewHealth / signal.TotalHealth);
     }
 }

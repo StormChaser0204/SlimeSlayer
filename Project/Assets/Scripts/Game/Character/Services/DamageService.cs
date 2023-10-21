@@ -1,18 +1,18 @@
 using System;
+using Game.Character.Signals;
 using Game.Enemies.Data;
-using Game.Shared.Damage.Signals;
 using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
 
-namespace Game.Shared.Damage
+namespace Game.Character.Services
 {
+    //move it to enemies?    
     [UsedImplicitly]
     internal class DamageService : IDisposable
     {
         private readonly ActiveEnemies _activeEnemies;
         private readonly Vector3 _attackPos;
-        private readonly DamageProcessor _damageProcessor;
         private readonly SignalBus _signalBus;
 
         public DamageService(ActiveEnemies activeEnemies, Transform characterAttackPoint,
@@ -20,15 +20,10 @@ namespace Game.Shared.Damage
         {
             _activeEnemies = activeEnemies;
             _attackPos = characterAttackPoint.position;
-
-            _damageProcessor = new DamageProcessor();
-            _damageProcessor.OnHealthChanged += ChangeHealth;
-            _damageProcessor.OnDeath += Death;
-
             _signalBus = signalBus;
         }
 
-        public void CharacterAttack(float damage, float range)
+        public void Attack(float damage, float range)
         {
             for (var i = 0; i < _activeEnemies.Count; i++)
             {
@@ -37,15 +32,21 @@ namespace Game.Shared.Damage
                 if (distance > range)
                     continue;
 
-                _damageProcessor.Process(damage, enemy);
+                DealDamage(damage, enemy);
             }
         }
-
-        public void EnemyAttack(int damage)
+        
+        private void DealDamage(float damage, Model model)
         {
-        }
+            model.Health -= damage;
+            ChangeHealth(model);
+            if (model.Health > 0)
+                return;
 
-        private void ChangeHealth(Model model) => _signalBus.Fire(new HealthChangedSignal(model));
+            Death(model);
+        }
+     
+        private void ChangeHealth(Model model) => _signalBus.Fire(new EnemyHealthChangedSignal(model));
 
         private void Death(Model model) => _signalBus.Fire(new EnemyDiedSignal(model));
         

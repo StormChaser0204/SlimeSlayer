@@ -10,25 +10,31 @@ namespace Game.Enemies.Data
         public readonly View View;
 
         public Type Type;
-        public float Damage;
+        public int Damage;
         public float MaxHealth;
         public float Health;
         public float Speed;
+        public float AttackCooldown;
         public bool EndPointReached;
 
         private IMemoryPool _pool;
+        private float _baseAttackCooldown;
 
         public Model(View view) => View = view;
 
-        public void Init(Type type, float damage, int maxHealth, float speed)
+        public void Init(Type type, int damage, int maxHealth, float speed, float attackCooldown)
         {
             Type = type;
             Damage = damage;
             MaxHealth = maxHealth;
             Health = maxHealth;
             Speed = speed;
+            AttackCooldown = attackCooldown;
+            _baseAttackCooldown = attackCooldown;
             EndPointReached = false;
         }
+
+        public void ResetAttackCooldown() => AttackCooldown = _baseAttackCooldown;
 
         public void OnDespawned() => _pool = null;
 

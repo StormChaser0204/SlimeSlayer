@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f47060abcf4520bf7b9545e4fefb50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _progres: {fileID: 4224040241322147069}
+  _progress: {fileID: 4224040241322147069}
   _transform: {fileID: 4369963057320396159}
   _offset: {x: -800, y: -200, z: 0}
 --- !u!1 &1627346418755278933

@@ -1,3 +1,4 @@
+using Game.Character;
 using Game.Character.Services;
 using Game.Character.Signals;
 using Game.Enemies;
@@ -5,8 +6,6 @@ using Game.Enemies.Data;
 using Game.Enemies.Services;
 using Game.Enemies.Signals;
 using Game.Enemies.Spawn;
-using Game.Shared.Damage;
-using Game.Shared.Damage.Signals;
 using Game.UI;
 using Game.UI.Health;
 using UnityEngine;
@@ -17,6 +16,8 @@ namespace Game
     [AddComponentMenu("Game/GameInstaller")]
     internal class Installer : MonoInstaller
     {
+        [SerializeField] private int _baseCharacterHealth;
+        [SerializeField] private float _baseCharacterDamage;
         [SerializeField] private float _baseCharacterSpeed;
         [SerializeField] private float _baseAttackCooldown;
         [SerializeField] private int _nextLevelExp;
@@ -31,6 +32,7 @@ namespace Game
         [Space] [SerializeField] private HealthBar _healthBarPrefab;
         [SerializeField] private Transform _healthBarParent;
         [SerializeField] private CharacterPanel _characterPanel;
+        [SerializeField] private Camera _mainCamera;
 
         public override void InstallBindings()
         {
@@ -40,7 +42,6 @@ namespace Game
 
             InstallCharacter();
             InstallEnemies();
-            InstallShared();
             InstallUI();
         }
 
@@ -50,14 +51,19 @@ namespace Game
             Container.DeclareSignal<BlockSignal>();
             Container.DeclareSignal<ExperienceChangedSignal>();
             Container.DeclareSignal<LevelUpSignal>();
+            Container.DeclareSignal<CharacterHealthChangedSignal>();
+            Container.DeclareSignal<CharacterDiedSignal>();
 
             Container.DeclareSignal<EnemyDiedSignal>();
-            Container.DeclareSignal<HealthChangedSignal>();
+            Container.DeclareSignal<EnemyHealthChangedSignal>();
             Container.DeclareSignal<SpawnEnemySignal>();
         }
 
         private void InstallCharacter()
         {
+            Container.Bind<CharacterStats>().AsSingle()
+                .WithArguments(_baseCharacterHealth, _baseCharacterDamage);
+
             Container.BindInterfacesTo<CharacterMovementService>().AsSingle()
                 .WithArguments(_baseCharacterSpeed);
 
@@ -66,6 +72,10 @@ namespace Game
 
             Container.Bind<ExperienceService>().AsSingle()
                 .WithArguments(_nextLevelExp, _levelScaler);
+
+            Container.BindInterfacesAndSelfTo<Character.Services.DamageService>()
+                .AsSingle()
+                .WithArguments(_attackPosition);
 
             Container.BindSignal<AttackSignal>()
                 .ToMethod<AttackService>(x => x.Attack)
@@ -95,22 +105,17 @@ namespace Game
             Container.BindSignal<EnemyDiedSignal>()
                 .ToMethod<SpawnService>(x => x.ReturnToPool)
                 .FromResolve();
-        }
 
-        private void InstallShared()
-        {
-            Container.BindInterfacesAndSelfTo<DamageService>()
-                .AsSingle()
-                .WithArguments(_attackPosition);
+            Container.BindInterfacesTo<Enemies.Services.DamageService>().AsSingle();
         }
 
         private void InstallUI()
         {
             Container.BindInstance(_characterPanel);
-            _characterPanel.Init(0, _nextLevelExp);
-            
+            _characterPanel.Init(0, _nextLevelExp, _mainCamera);
+
             Container.BindInterfacesAndSelfTo<HealthService>().AsSingle()
-                .WithArguments(_healthBarPrefab, _healthBarParent);
+                .WithArguments(_healthBarPrefab, _healthBarParent, _mainCamera);
 
             Container.BindSignal<SpawnEnemySignal>()
                 .ToMethod<HealthService>(x => x.InstantiateNewBar)
@@ -120,7 +125,7 @@ namespace Game
                 .ToMethod<HealthService>(x => x.ReturnBar)
                 .FromResolve();
 
-            Container.BindSignal<HealthChangedSignal>()
+            Container.BindSignal<EnemyHealthChangedSignal>()
                 .ToMethod<HealthService>(x => x.UpdateHealthBar)
                 .FromResolve();
 
@@ -129,6 +134,9 @@ namespace Game
 
             Container.BindSignal<ExperienceChangedSignal>()
                 .ToMethod(x => _characterPanel.UpdateProgress(x));
+
+            Container.BindSignal<CharacterHealthChangedSignal>()
+                .ToMethod(x => _characterPanel.UpdateHealth(x));
         }
     }
 }

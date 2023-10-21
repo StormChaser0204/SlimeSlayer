@@ -1,9 +1,9 @@
 using System;
 using Common;
+using Game.Character.Signals;
 using Game.Enemies.Data;
 using Game.Enemies.Signals;
 using Game.Enemies.Spawn;
-using Game.Shared.Damage.Signals;
 using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
@@ -36,7 +36,7 @@ namespace Game.Enemies.Services
             var model = _factory.Create();
             model.SetViewActiveState(true);
             model.View.transform.position = _spawnPoint;
-            model.Init(Data.Type.Small, 1, 3, 2);
+            model.Init(Data.Type.Small, 1, 3, 2, 2);
             _activeEnemies.Add(model);
             _signalBus.Fire(new SpawnEnemySignal(model));
         }

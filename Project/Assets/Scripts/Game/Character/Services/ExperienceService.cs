@@ -1,5 +1,4 @@
 using Game.Character.Signals;
-using Game.Shared.Damage.Signals;
 using JetBrains.Annotations;
 using Zenject;
 

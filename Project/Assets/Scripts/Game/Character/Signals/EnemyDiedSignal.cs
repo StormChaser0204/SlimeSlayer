@@ -1,6 +1,6 @@
 ﻿using Game.Enemies.Data;
 
-namespace Game.Shared.Damage.Signals
+namespace Game.Character.Signals
 {
     internal class EnemyDiedSignal
     {
