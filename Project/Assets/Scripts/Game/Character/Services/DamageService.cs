@@ -1,4 +1,3 @@
-using System;
 using Game.Character.Signals;
 using Game.Enemies.Data;
 using JetBrains.Annotations;
@@ -7,9 +6,8 @@ using Zenject;
 
 namespace Game.Character.Services
 {
-    //move it to enemies?    
     [UsedImplicitly]
-    internal class DamageService : IDisposable
+    internal class DamageService
     {
         private readonly ActiveEnemies _activeEnemies;
         private readonly Vector3 _attackPos;
@@ -49,9 +47,5 @@ namespace Game.Character.Services
         private void ChangeHealth(Model model) => _signalBus.Fire(new EnemyHealthChangedSignal(model));
 
         private void Death(Model model) => _signalBus.Fire(new EnemyDiedSignal(model));
-        
-        public void Dispose()
-        {
-        }
     }
 }

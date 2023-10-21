@@ -18,6 +18,7 @@ namespace Game
     {
         [SerializeField] private int _baseCharacterHealth;
         [SerializeField] private float _baseCharacterDamage;
+        [SerializeField] private float _baseCharacterInvulnerableDuration;
         [SerializeField] private float _baseCharacterSpeed;
         [SerializeField] private float _baseAttackCooldown;
         [SerializeField] private int _nextLevelExp;
@@ -62,27 +63,31 @@ namespace Game
         private void InstallCharacter()
         {
             Container.Bind<CharacterStats>().AsSingle()
-                .WithArguments(_baseCharacterHealth, _baseCharacterDamage);
+                .WithArguments(_baseCharacterHealth, _baseCharacterDamage,
+                    _baseCharacterInvulnerableDuration);
 
             Container.BindInterfacesTo<CharacterMovementService>().AsSingle()
                 .WithArguments(_baseCharacterSpeed);
 
-            Container.BindInterfacesAndSelfTo<AttackService>().AsSingle()
-                .WithArguments(_baseAttackCooldown);
+            Container.BindInterfacesAndSelfTo<ActionService>().AsSingle();
 
             Container.Bind<ExperienceService>().AsSingle()
                 .WithArguments(_nextLevelExp, _levelScaler);
 
-            Container.BindInterfacesAndSelfTo<Character.Services.DamageService>()
+            Container.Bind<Character.Services.DamageService>()
                 .AsSingle()
                 .WithArguments(_attackPosition);
 
             Container.BindSignal<AttackSignal>()
-                .ToMethod<AttackService>(x => x.Attack)
+                .ToMethod<ActionService>(x => x.Attack)
+                .FromResolve();
+            
+            Container.BindSignal<BlockSignal>()
+                .ToMethod<ActionService>(x => x.Block)
                 .FromResolve();
 
             Container.BindSignal<LevelUpSignal>()
-                .ToMethod<AttackService>(x => x.IncreaseDamage)
+                .ToMethod<ActionService>(x => x.IncreaseDamage)
                 .FromResolve();
 
             Container.BindSignal<EnemyDiedSignal>()

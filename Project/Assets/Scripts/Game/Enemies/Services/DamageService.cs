@@ -38,6 +38,9 @@ namespace Game.Enemies.Services
 
         private void DealDamage(Model model)
         {
+            if (_characterStats.IsInvulnerable)
+                return;
+
             _characterStats.UpdateHealth(-model.Damage);
             model.ResetAttackCooldown();
             _signalBus.Fire(new CharacterHealthChangedSignal(_characterStats.TotalHealth,

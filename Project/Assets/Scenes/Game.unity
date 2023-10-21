@@ -1421,6 +1421,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseCharacterHealth: 5
   _baseCharacterDamage: 1
+  _baseCharacterInvulnerableDuration: 2
   _baseCharacterSpeed: 1
   _baseAttackCooldown: 1
   _nextLevelExp: 3
