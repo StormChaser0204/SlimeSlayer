@@ -3,7 +3,7 @@ using JetBrains.Annotations;
 namespace Game.Character
 {
     [UsedImplicitly]
-    internal class CharacterStats
+    internal class CharacterInfo
     {
         public int TotalHealth { get; }
         public int CurrentHealth { get; private set; }
@@ -11,7 +11,7 @@ namespace Game.Character
         public bool IsInvulnerable { get; private set; }
         public float InvulnerableDuration { get; private set; }
 
-        public CharacterStats(int health, float damage, float invulnerableDuration)
+        public CharacterInfo(int health, float damage, float invulnerableDuration)
         {
             TotalHealth = health;
             CurrentHealth = health;

@@ -1,3 +1,4 @@
+using Common.SignalDispatching.Dispatcher;
 using Game.Character.Signals;
 using JetBrains.Annotations;
 using Zenject;
@@ -7,6 +8,8 @@ namespace Game.Character.Services
     [UsedImplicitly]
     internal class ExperienceService
     {
+        [Inject] private ISignalDispatcher _dispatcher; 
+        
         private readonly SignalBus _signalBus;
         private readonly int _levelScaler;
 
@@ -32,6 +35,7 @@ namespace Game.Character.Services
             _currentLevel++;
             _signalBus.Fire(new LevelUpSignal(_nextLevelExpAmount, _nextLevelExpAmount + _levelScaler,
                 _currentLevel));
+            
             _nextLevelExpAmount += _levelScaler;
         }
     }

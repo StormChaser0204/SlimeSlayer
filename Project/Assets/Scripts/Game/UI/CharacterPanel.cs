@@ -1,3 +1,4 @@
+using Game.Character;
 using Game.Character.Signals;
 using Game.Enemies.Signals;
 using Game.UI.Health;
@@ -20,7 +21,8 @@ namespace Game.UI
         [SerializeField] private Transform _characterTransform;
 
         [Inject] private SignalBus _signalBus;
-
+        [Inject] private Character.CharacterInfo _characterInfo; 
+        
         public void Init(int currentLevel, int nextLevelExpAmount, Camera mainCamera)
         {
             _levelProgress.maxValue = nextLevelExpAmount;

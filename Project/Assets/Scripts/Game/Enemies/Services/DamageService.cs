@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Game.Character;
 using Game.Enemies.Data;
 using Game.Enemies.Signals;
 using JetBrains.Annotations;
@@ -11,14 +10,14 @@ namespace Game.Enemies.Services
     [UsedImplicitly]
     internal class DamageService : ITickable
     {
-        private readonly CharacterStats _characterStats;
+        private readonly Character.CharacterInfo _characterInfo;
         private readonly ActiveEnemies _activeEnemies;
         private readonly SignalBus _signalBus;
 
-        public DamageService(CharacterStats characterStats, ActiveEnemies activeEnemies,
+        public DamageService(Character.CharacterInfo characterInfo, ActiveEnemies activeEnemies,
             SignalBus signalBus)
         {
-            _characterStats = characterStats;
+            _characterInfo = characterInfo;
             _activeEnemies = activeEnemies;
             _signalBus = signalBus;
         }
@@ -38,13 +37,13 @@ namespace Game.Enemies.Services
 
         private void DealDamage(Model model)
         {
-            if (_characterStats.IsInvulnerable)
+            if (_characterInfo.IsInvulnerable)
                 return;
 
-            _characterStats.UpdateHealth(-model.Damage);
+            _characterInfo.UpdateHealth(-model.Damage);
             model.ResetAttackCooldown();
-            _signalBus.Fire(new CharacterHealthChangedSignal(_characterStats.TotalHealth,
-                _characterStats.CurrentHealth));
+            _signalBus.Fire(new CharacterHealthChangedSignal(_characterInfo.TotalHealth,
+                _characterInfo.CurrentHealth));
         }
     }
 }

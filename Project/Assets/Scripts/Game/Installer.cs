@@ -1,3 +1,4 @@
+using Common.SignalDispatching.Dispatcher;
 using Game.Character;
 using Game.Character.Services;
 using Game.Character.Signals;
@@ -21,6 +22,7 @@ namespace Game
         [SerializeField] private float _baseCharacterInvulnerableDuration;
         [SerializeField] private float _baseCharacterSpeed;
         [SerializeField] private float _baseAttackCooldown;
+        [SerializeField] private float _baseBlockCooldown;
         [SerializeField] private int _nextLevelExp;
         [SerializeField] private int _levelScaler;
 
@@ -35,11 +37,16 @@ namespace Game
         [SerializeField] private CharacterPanel _characterPanel;
         [SerializeField] private Camera _mainCamera;
 
+        private ISignalDispatcher _dispatcher;
+
         public override void InstallBindings()
         {
             SignalBusInstaller.Install(Container);
 
+
             DeclareSignals();
+
+            InstallCommon();
 
             InstallCharacter();
             InstallEnemies();
@@ -60,9 +67,19 @@ namespace Game
             Container.DeclareSignal<SpawnEnemySignal>();
         }
 
+        private void InstallCommon()
+        {
+            _dispatcher = new SignalDispatcher(Container);
+            Container.Bind<ISignalDispatcher>().FromInstance(_dispatcher).AsSingle();
+        }
+
         private void InstallCharacter()
         {
-            Container.Bind<CharacterStats>().AsSingle()
+            Container.Bind<Character.CharacterInfo>().AsSingle()
+                .WithArguments(_baseCharacterHealth, _baseCharacterDamage,
+                    _baseCharacterInvulnerableDuration);
+
+            Container.Bind<AbilitiesInfo>().AsSingle()
                 .WithArguments(_baseCharacterHealth, _baseCharacterDamage,
                     _baseCharacterInvulnerableDuration);
 
@@ -81,7 +98,7 @@ namespace Game
             Container.BindSignal<AttackSignal>()
                 .ToMethod<ActionService>(x => x.Attack)
                 .FromResolve();
-            
+
             Container.BindSignal<BlockSignal>()
                 .ToMethod<ActionService>(x => x.Block)
                 .FromResolve();

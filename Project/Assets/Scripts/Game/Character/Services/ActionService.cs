@@ -8,29 +8,29 @@ namespace Game.Character.Services
     internal class ActionService : ITickable
     {
         private readonly DamageService _damageService;
-        private readonly CharacterStats _characterStats;
+        private readonly CharacterInfo _characterInfo;
         private readonly DelayedAction _block;
 
         private float _invulnerableDuration;
 
-        public ActionService(DamageService damageService, CharacterStats stats)
+        public ActionService(DamageService damageService, CharacterInfo info)
         {
             _damageService = damageService;
-            _characterStats = stats;
+            _characterInfo = info;
             _block = new DelayedAction(0, StopBlock);
         }
 
-        public void Attack() => _damageService.Attack(_characterStats.Damage, 2);
+        public void Attack() => _damageService.Attack(_characterInfo.Damage, 2);
 
         public void Block()
         {
-            _characterStats.SetInvulnerableState(true);
-            _block.SetDelay(_characterStats.InvulnerableDuration);
+            _characterInfo.SetInvulnerableState(true);
+            _block.SetDelay(_characterInfo.InvulnerableDuration);
         }
 
-        private void StopBlock() => _characterStats.SetInvulnerableState(false);
+        private void StopBlock() => _characterInfo.SetInvulnerableState(false);
 
-        public void IncreaseDamage() => _characterStats.UpdateDamage(2);
+        public void IncreaseDamage() => _characterInfo.UpdateDamage(2);
 
         public void Tick() => _block?.Update();
     }
