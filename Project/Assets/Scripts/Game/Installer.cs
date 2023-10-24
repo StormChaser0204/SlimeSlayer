@@ -20,6 +20,7 @@ namespace Game
     [AddComponentMenu("Game/GameInstaller")]
     internal class Installer : MonoInstaller
     {
+        [SerializeField] private Transform _attackPosition;
         [SerializeField] private int _baseCharacterHealth;
         [SerializeField] private float _baseCharacterDamage;
         [SerializeField] private float _baseCharacterInvulnerableDuration;
@@ -36,7 +37,6 @@ namespace Game
         [SerializeField] private Transform _endPoint;
         [SerializeField] private View _enemyView;
 
-        [Space] [SerializeField] private Transform _attackPosition;
         [Space] [SerializeField] private HealthBar _healthBarPrefab;
         [SerializeField] private Transform _healthBarParent;
         [SerializeField] private CharacterPanel _characterPanel;
@@ -64,8 +64,9 @@ namespace Game
             Container.Bind<ExperienceMap>().FromInstance(experienceMap);
 
             Container.Bind<Character.Data.CharacterInfo>().AsSingle()
-                .WithArguments(_baseCharacterHealth, _baseCharacterDamage,
-                    _baseCharacterInvulnerableDuration, _baseAttackRange);
+                .WithArguments(_baseCharacterHealth, _baseCharacterDamage, _baseAttackRange,
+                    _attackPosition.position,
+                    _baseCharacterInvulnerableDuration);
 
             Container.Bind<AbilitiesInfo>().AsSingle()
                 .WithArguments(_baseAttackCooldown, _baseBlockCooldown);
@@ -77,9 +78,6 @@ namespace Game
 
             Container.Bind<ExperienceService>().AsSingle()
                 .WithArguments(_nextLevelExp, _levelScaler);
-
-            Container.Bind<Character.Services.DamageService>().AsSingle()
-                .WithArguments(_attackPosition);
 
             _dispatcher.Bind().Handler<AttackHandler>().To<AttackSignal>();
             _dispatcher.Bind().Handler<BlockHandler>().To<BlockSignal>();
@@ -93,13 +91,13 @@ namespace Game
             Container.BindFactory<Model, Factory>()
                 .FromPoolableMemoryPool(x => x.WithInitialSize(1).FromFactory<CustomFactory>());
 
-            Container.Bind<ActiveEnemies>().AsSingle();
+            Container.Bind<InstancedEnemies>().AsSingle();
             Container.BindInterfacesAndSelfTo<SpawnService>().AsSingle()
                 .WithArguments(_spawnPoint, _spawnTime);
             Container.BindInterfacesAndSelfTo<EnemiesMovementService>().AsSingle()
                 .WithArguments(_endPoint);
 
-            Container.BindInterfacesTo<Enemies.Services.DamageService>().AsSingle();
+            Container.BindInterfacesTo<DamageService>().AsSingle();
 
             _dispatcher.Bind().Handler<PoolHandler>().To<EnemyDiedSignal>();
         }

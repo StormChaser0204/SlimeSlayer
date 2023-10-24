@@ -14,17 +14,18 @@ namespace Game.Enemies.Services
         [Inject] private ISignalDispatcher _dispatcher;
 
         private readonly Character.Data.CharacterInfo _characterInfo;
-        private readonly ActiveEnemies _activeEnemies;
+        private readonly InstancedEnemies _instancedEnemies;
 
-        public DamageService(Character.Data.CharacterInfo characterInfo, ActiveEnemies activeEnemies)
+        public DamageService(Character.Data.CharacterInfo characterInfo,
+            InstancedEnemies instancedEnemies)
         {
             _characterInfo = characterInfo;
-            _activeEnemies = activeEnemies;
+            _instancedEnemies = instancedEnemies;
         }
 
         public void Tick()
         {
-            var readyToAttack = _activeEnemies.Where(e => e.EndPointReached);
+            var readyToAttack = _instancedEnemies.Where(e => e.IsAlive).Where(e => e.EndPointReached);
 
             foreach (var enemy in readyToAttack)
             {
@@ -37,11 +38,12 @@ namespace Game.Enemies.Services
 
         private void DealDamage(Model model)
         {
+            model.ResetAttackCooldown();
+
             if (_characterInfo.IsInvulnerable)
                 return;
 
             _characterInfo.UpdateHealth(-model.Damage);
-            model.ResetAttackCooldown();
             _dispatcher.Raise(new CharacterHealthChangedSignal(_characterInfo.TotalHealth,
                 _characterInfo.CurrentHealth));
         }

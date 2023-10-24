@@ -16,6 +16,7 @@ namespace Game.Enemies.Data
         public float Speed;
         public float AttackCooldown;
         public bool EndPointReached;
+        public bool IsAlive => Health != 0;
 
         private IMemoryPool _pool;
         private float _baseAttackCooldown;

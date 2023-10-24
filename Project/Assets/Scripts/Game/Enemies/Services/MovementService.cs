@@ -10,14 +10,14 @@ namespace Game.Enemies.Services
     [UsedImplicitly]
     internal class EnemiesMovementService : ITickable
     {
-        private readonly ActiveEnemies _units;
+        private readonly InstancedEnemies _units;
         private readonly float _endPointPointPosition;
 
         public Action<Model> OnEndPointReached;
 
-        public EnemiesMovementService(ActiveEnemies activeEnemies, Transform endPoint)
+        public EnemiesMovementService(InstancedEnemies instancedEnemies, Transform endPoint)
         {
-            _units = activeEnemies;
+            _units = instancedEnemies;
             _endPointPointPosition = endPoint.position.x;
         }
 
