@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Common.SignalDispatching.Binding;
 using Common.SignalHandler;
+using Common.SignalHandler.Handlers;
 using UnityEngine;
 using Zenject;
 
@@ -51,8 +53,20 @@ namespace Common.SignalDispatching.Dispatcher
 
         private void ProcessSignal(ISignal signal, Type handlerType)
         {
-            var handler = CreateHandler(signal, handlerType);
-            ((IHandler) handler).Handle();
+            var handlerBase = CreateHandler(signal, handlerType);
+            switch (handlerBase)
+            {
+                case IHandler handler:
+                {
+                    handler.Handle();
+                    break;
+                }
+                case ITaskHandler taskHandler:
+                {
+                    RunAndForget(taskHandler, default);
+                    break;
+                }
+            }
         }
 
         private SignalHandlerBase CreateHandler(ISignal signal, Type handlerType)
@@ -61,5 +75,9 @@ namespace Common.SignalDispatching.Dispatcher
             _container.Inject(handler);
             return handler;
         }
+
+        private static async void RunAndForget(ITaskHandler taskHandler,
+            CancellationToken cancellationToken) =>
+            await taskHandler.Handle(cancellationToken);
     }
 }

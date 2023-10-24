@@ -1,4 +1,6 @@
+using Common.SignalDispatching.Dispatcher;
 using Game.Character;
+using Game.Character.Data;
 using Game.Character.Signals;
 using Game.Enemies.Signals;
 using Game.UI.Health;
@@ -15,14 +17,12 @@ namespace Game.UI
         [SerializeField] private TMP_Text _currentLevelLabel;
         [SerializeField] private ButtonWithCooldown _attackBtn;
         [SerializeField] private ButtonWithCooldown _blockBtn;
-        [SerializeField] private float _attackCooldown;
-        [SerializeField] private float _blockCooldown;
         [SerializeField] private HealthBar _healthBar;
         [SerializeField] private Transform _characterTransform;
 
-        [Inject] private SignalBus _signalBus;
-        [Inject] private Character.CharacterInfo _characterInfo; 
-        
+        [Inject] private AbilitiesInfo _abilitiesInfo;
+        [Inject] private ISignalDispatcher _dispatcher;
+
         public void Init(int currentLevel, int nextLevelExpAmount, Camera mainCamera)
         {
             _levelProgress.maxValue = nextLevelExpAmount;
@@ -39,27 +39,28 @@ namespace Game.UI
 
         private void Attack()
         {
-            _signalBus.Fire(new AttackSignal());
-            StartCoroutine(_attackBtn.Cooldown(_attackCooldown));
+            _dispatcher.Raise(new AttackSignal());
+            StartCoroutine(_attackBtn.Cooldown(_abilitiesInfo.AttackCooldown));
         }
 
         private void Block()
         {
-            _signalBus.Fire(new BlockSignal());
-            StartCoroutine(_blockBtn.Cooldown(_blockCooldown));
+            _dispatcher.Raise(new BlockSignal());
+            StartCoroutine(_blockBtn.Cooldown(_abilitiesInfo.BlockCooldown));
         }
 
-        public void SetNewLevelProgress(LevelUpSignal signal)
+        public void SetNewLevelProgress(int currentLevelExpAmount, int nextLevelExpAmount,
+            int currentLevel)
         {
-            _levelProgress.minValue = signal.CurrentLevelExpAmount;
-            _levelProgress.maxValue = signal.NextLevelExpAmount;
-            _currentLevelLabel.text = $"{signal.CurrentLevel}lvl";
+            _levelProgress.minValue = currentLevelExpAmount;
+            _levelProgress.maxValue = nextLevelExpAmount;
+            _currentLevelLabel.text = $"{currentLevel}lvl";
         }
 
-        public void UpdateProgress(ExperienceChangedSignal signal) =>
-            _levelProgress.value = signal.Current;
+        public void UpdateLevelProgress(int expAmount) =>
+            _levelProgress.value = expAmount;
 
-        public void UpdateHealth(CharacterHealthChangedSignal signal) =>
-            _healthBar.UpdateValue((float) signal.NewHealth / signal.TotalHealth);
+        public void UpdateHealth(int newHealth, int totalHealth) =>
+            _healthBar.UpdateValue((float) newHealth / totalHealth);
     }
 }

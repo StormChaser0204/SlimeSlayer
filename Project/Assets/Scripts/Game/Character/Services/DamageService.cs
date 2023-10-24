@@ -1,5 +1,6 @@
-using Game.Character.Signals;
+using Common.SignalDispatching.Dispatcher;
 using Game.Enemies.Data;
+using Game.Enemies.Signals;
 using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
@@ -9,16 +10,15 @@ namespace Game.Character.Services
     [UsedImplicitly]
     internal class DamageService
     {
+        [Inject] private ISignalDispatcher _dispatcher;
+
         private readonly ActiveEnemies _activeEnemies;
         private readonly Vector3 _attackPos;
-        private readonly SignalBus _signalBus;
 
-        public DamageService(ActiveEnemies activeEnemies, Transform characterAttackPoint,
-            SignalBus signalBus)
+        public DamageService(ActiveEnemies activeEnemies, Transform characterAttackPoint)
         {
             _activeEnemies = activeEnemies;
             _attackPos = characterAttackPoint.position;
-            _signalBus = signalBus;
         }
 
         public void Attack(float damage, float range)
@@ -33,7 +33,7 @@ namespace Game.Character.Services
                 DealDamage(damage, enemy);
             }
         }
-        
+
         private void DealDamage(float damage, Model model)
         {
             model.Health -= damage;
@@ -43,9 +43,10 @@ namespace Game.Character.Services
 
             Death(model);
         }
-     
-        private void ChangeHealth(Model model) => _signalBus.Fire(new EnemyHealthChangedSignal(model));
 
-        private void Death(Model model) => _signalBus.Fire(new EnemyDiedSignal(model));
+        private void ChangeHealth(Model model) =>
+            _dispatcher.Raise(new EnemyHealthChangedSignal(model));
+
+        private void Death(Model model) => _dispatcher.Raise(new EnemyDiedSignal(model));
     }
 }

@@ -1424,8 +1424,11 @@ MonoBehaviour:
   _baseCharacterInvulnerableDuration: 2
   _baseCharacterSpeed: 1
   _baseAttackCooldown: 1
+  _baseBlockCooldown: 1
+  _baseAttackRange: 2
   _nextLevelExp: 3
   _levelScaler: 5
+  _experienceData: {fileID: 11400000, guid: 892b4f2f60b2b284fbe743ade4ce78e8, type: 2}
   _spawnTime: 5
   _spawnPoint: {fileID: 1695022276}
   _endPoint: {fileID: 985812911}

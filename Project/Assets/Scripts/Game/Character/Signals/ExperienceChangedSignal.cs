@@ -1,10 +1,12 @@
-﻿namespace Game.Character.Signals
-{
-    internal class ExperienceChangedSignal
-    {
-        public readonly int Current;
+﻿using Common.SignalHandler;
 
-        public ExperienceChangedSignal(int current) =>
-            Current = current;
+namespace Game.Character.Signals
+{
+    internal class ExperienceChangedSignal : ISignal
+    {
+        public readonly int CurrentExpAmount;
+
+        public ExperienceChangedSignal(int currentExpAmount) =>
+            CurrentExpAmount = currentExpAmount;
     }
 }

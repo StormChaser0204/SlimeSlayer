@@ -8,34 +8,32 @@ namespace Game.Character.Services
     [UsedImplicitly]
     internal class ExperienceService
     {
-        [Inject] private ISignalDispatcher _dispatcher; 
-        
-        private readonly SignalBus _signalBus;
+        [Inject] private ISignalDispatcher _dispatcher;
+
         private readonly int _levelScaler;
 
         private int _currentLevel;
         private int _currentExpAmount;
         private int _nextLevelExpAmount;
 
-        public ExperienceService(SignalBus signalBus, int expNextLevelExpAmount, int levelScaler)
+        public ExperienceService(int expNextLevelExpAmount, int levelScaler)
         {
-            _signalBus = signalBus;
             _levelScaler = levelScaler;
             _nextLevelExpAmount = expNextLevelExpAmount;
         }
 
-        public void AddExperience(EnemyDiedSignal signal)
+        public void AddExperience(int amount)
         {
-            _currentExpAmount += 1;
-            _signalBus.Fire(new ExperienceChangedSignal(_currentExpAmount));
+            _currentExpAmount += amount;
+            _dispatcher.Raise(new ExperienceChangedSignal(_currentExpAmount));
 
             if (_currentExpAmount < _nextLevelExpAmount)
                 return;
 
             _currentLevel++;
-            _signalBus.Fire(new LevelUpSignal(_nextLevelExpAmount, _nextLevelExpAmount + _levelScaler,
+            _dispatcher.Raise(new LevelUpSignal(_nextLevelExpAmount, _nextLevelExpAmount + _levelScaler,
                 _currentLevel));
-            
+
             _nextLevelExpAmount += _levelScaler;
         }
     }

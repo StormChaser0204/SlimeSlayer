@@ -1,13 +1,16 @@
 using Common.SignalDispatching.Dispatcher;
-using Game.Character;
+using Game.Character.Data;
+using Game.Character.Handlers;
 using Game.Character.Services;
 using Game.Character.Signals;
 using Game.Enemies;
 using Game.Enemies.Data;
+using Game.Enemies.Handlers;
 using Game.Enemies.Services;
 using Game.Enemies.Signals;
 using Game.Enemies.Spawn;
 using Game.UI;
+using Game.UI.Handlers;
 using Game.UI.Health;
 using UnityEngine;
 using Zenject;
@@ -23,8 +26,10 @@ namespace Game
         [SerializeField] private float _baseCharacterSpeed;
         [SerializeField] private float _baseAttackCooldown;
         [SerializeField] private float _baseBlockCooldown;
+        [SerializeField] private float _baseAttackRange;
         [SerializeField] private int _nextLevelExp;
         [SerializeField] private int _levelScaler;
+        [SerializeField] private ExperienceData _experienceData;
 
         [Space] [SerializeField] private float _spawnTime;
         [SerializeField] private Transform _spawnPoint;
@@ -41,47 +46,29 @@ namespace Game
 
         public override void InstallBindings()
         {
-            SignalBusInstaller.Install(Container);
-
-
-            DeclareSignals();
-
-            InstallCommon();
+            _dispatcher = new SignalDispatcher(Container);
+            Container.Bind<ISignalDispatcher>().FromInstance(_dispatcher).AsSingle();
 
             InstallCharacter();
             InstallEnemies();
             InstallUI();
         }
 
-        private void DeclareSignals()
-        {
-            Container.DeclareSignal<AttackSignal>();
-            Container.DeclareSignal<BlockSignal>();
-            Container.DeclareSignal<ExperienceChangedSignal>();
-            Container.DeclareSignal<LevelUpSignal>();
-            Container.DeclareSignal<CharacterHealthChangedSignal>();
-            Container.DeclareSignal<CharacterDiedSignal>();
-
-            Container.DeclareSignal<EnemyDiedSignal>();
-            Container.DeclareSignal<EnemyHealthChangedSignal>();
-            Container.DeclareSignal<SpawnEnemySignal>();
-        }
-
-        private void InstallCommon()
-        {
-            _dispatcher = new SignalDispatcher(Container);
-            Container.Bind<ISignalDispatcher>().FromInstance(_dispatcher).AsSingle();
-        }
-
         private void InstallCharacter()
         {
-            Container.Bind<Character.CharacterInfo>().AsSingle()
+            var experienceMap = new ExperienceMap();
+
+            foreach (var element in _experienceData.Elements)
+                experienceMap.Add(element.Type, element.Amount);
+
+            Container.Bind<ExperienceMap>().FromInstance(experienceMap);
+
+            Container.Bind<Character.Data.CharacterInfo>().AsSingle()
                 .WithArguments(_baseCharacterHealth, _baseCharacterDamage,
-                    _baseCharacterInvulnerableDuration);
+                    _baseCharacterInvulnerableDuration, _baseAttackRange);
 
             Container.Bind<AbilitiesInfo>().AsSingle()
-                .WithArguments(_baseCharacterHealth, _baseCharacterDamage,
-                    _baseCharacterInvulnerableDuration);
+                .WithArguments(_baseAttackCooldown, _baseBlockCooldown);
 
             Container.BindInterfacesTo<CharacterMovementService>().AsSingle()
                 .WithArguments(_baseCharacterSpeed);
@@ -91,25 +78,13 @@ namespace Game
             Container.Bind<ExperienceService>().AsSingle()
                 .WithArguments(_nextLevelExp, _levelScaler);
 
-            Container.Bind<Character.Services.DamageService>()
-                .AsSingle()
+            Container.Bind<Character.Services.DamageService>().AsSingle()
                 .WithArguments(_attackPosition);
 
-            Container.BindSignal<AttackSignal>()
-                .ToMethod<ActionService>(x => x.Attack)
-                .FromResolve();
-
-            Container.BindSignal<BlockSignal>()
-                .ToMethod<ActionService>(x => x.Block)
-                .FromResolve();
-
-            Container.BindSignal<LevelUpSignal>()
-                .ToMethod<ActionService>(x => x.IncreaseDamage)
-                .FromResolve();
-
-            Container.BindSignal<EnemyDiedSignal>()
-                .ToMethod<ExperienceService>(x => x.AddExperience)
-                .FromResolve();
+            _dispatcher.Bind().Handler<AttackHandler>().To<AttackSignal>();
+            _dispatcher.Bind().Handler<BlockHandler>().To<BlockSignal>();
+            _dispatcher.Bind().Handler<ExperienceHandler>().To<EnemyDiedSignal>();
+            _dispatcher.Bind().Handler<PowerUpHandler>().To<LevelUpSignal>();
         }
 
         private void InstallEnemies()
@@ -124,11 +99,9 @@ namespace Game
             Container.BindInterfacesAndSelfTo<EnemiesMovementService>().AsSingle()
                 .WithArguments(_endPoint);
 
-            Container.BindSignal<EnemyDiedSignal>()
-                .ToMethod<SpawnService>(x => x.ReturnToPool)
-                .FromResolve();
-
             Container.BindInterfacesTo<Enemies.Services.DamageService>().AsSingle();
+
+            _dispatcher.Bind().Handler<PoolHandler>().To<EnemyDiedSignal>();
         }
 
         private void InstallUI()
@@ -139,26 +112,13 @@ namespace Game
             Container.BindInterfacesAndSelfTo<HealthService>().AsSingle()
                 .WithArguments(_healthBarPrefab, _healthBarParent, _mainCamera);
 
-            Container.BindSignal<SpawnEnemySignal>()
-                .ToMethod<HealthService>(x => x.InstantiateNewBar)
-                .FromResolve();
+            _dispatcher.Bind().Handler<EnemyHealthBarHandler>().To<SpawnEnemySignal>();
+            _dispatcher.Bind().Handler<EnemyHealthBarHandler>().To<EnemyDiedSignal>();
+            _dispatcher.Bind().Handler<EnemyHealthBarHandler>().To<EnemyHealthChangedSignal>();
 
-            Container.BindSignal<EnemyDiedSignal>()
-                .ToMethod<HealthService>(x => x.ReturnBar)
-                .FromResolve();
-
-            Container.BindSignal<EnemyHealthChangedSignal>()
-                .ToMethod<HealthService>(x => x.UpdateHealthBar)
-                .FromResolve();
-
-            Container.BindSignal<LevelUpSignal>()
-                .ToMethod(x => _characterPanel.SetNewLevelProgress(x));
-
-            Container.BindSignal<ExperienceChangedSignal>()
-                .ToMethod(x => _characterPanel.UpdateProgress(x));
-
-            Container.BindSignal<CharacterHealthChangedSignal>()
-                .ToMethod(x => _characterPanel.UpdateHealth(x));
+            _dispatcher.Bind().Handler<CharacterNewLevelHandler>().To<LevelUpSignal>();
+            _dispatcher.Bind().Handler<CharacterLevelProgressHandler>().To<ExperienceChangedSignal>();
+            _dispatcher.Bind().Handler<CharacterHealthHandler>().To<CharacterHealthChangedSignal>();
         }
     }
 }

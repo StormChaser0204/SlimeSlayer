@@ -1,6 +1,8 @@
-﻿namespace Game.Character.Signals
+﻿using Common.SignalHandler;
+
+namespace Game.Character.Signals
 {
-    internal class LevelUpSignal
+    internal class LevelUpSignal : ISignal
     {
         public readonly int CurrentLevelExpAmount;
         public readonly int NextLevelExpAmount;

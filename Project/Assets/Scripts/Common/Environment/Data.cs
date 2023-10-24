@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Common.Environment
 {
@@ -23,7 +24,7 @@ namespace Common.Environment
             public bool IsEqual(Texture2D tex) => Texture == tex;
         }
 
-        [SerializeField] private List<Info> _infos = new();
+        [FormerlySerializedAs("_infos")] [SerializeField] private List<Info> _info = new();
         [SerializeField] private Sprite[] _trunks;
         [SerializeField] private Sprite[] _crowns;
 
@@ -33,15 +34,15 @@ namespace Common.Environment
 
         public Info GetInfoByTexture(Texture2D tex)
         {
-            if (_infos.Any(p => p.IsEqual(tex)))
+            if (_info.Any(p => p.IsEqual(tex)))
                 return GetByTexture(tex);
 
             var info = new Info(tex);
-            _infos.Add(info);
+            _info.Add(info);
             return info;
         }
 
         private Info GetByTexture(Texture2D tex) =>
-            _infos.First(p => p.IsEqual(tex));
+            _info.First(p => p.IsEqual(tex));
     }
 }

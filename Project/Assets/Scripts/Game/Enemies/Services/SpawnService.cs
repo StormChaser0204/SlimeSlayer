@@ -1,6 +1,6 @@
 using System;
 using Common;
-using Game.Character.Signals;
+using Common.SignalDispatching.Dispatcher;
 using Game.Enemies.Data;
 using Game.Enemies.Signals;
 using Game.Enemies.Spawn;
@@ -13,20 +13,20 @@ namespace Game.Enemies.Services
     [UsedImplicitly]
     internal class SpawnService : ITickable, IDisposable
     {
+        [Inject] private ISignalDispatcher _dispatcher;
+
         private readonly ActiveEnemies _activeEnemies;
         private readonly Factory _factory;
         private readonly Vector3 _spawnPoint;
         private readonly RepeatableAction _spawn;
-        private readonly SignalBus _signalBus;
 
         public SpawnService(ActiveEnemies activeEnemies, Factory factory,
-            Transform spawnPoint, float spawnTime, SignalBus signalBus)
+            Transform spawnPoint, float spawnTime)
         {
             _activeEnemies = activeEnemies;
             _factory = factory;
             _spawnPoint = spawnPoint.position;
             _spawn = new RepeatableAction(spawnTime, SpawnUnit);
-            _signalBus = signalBus;
         }
 
         public void Tick() => _spawn.Update();
@@ -38,12 +38,11 @@ namespace Game.Enemies.Services
             model.View.transform.position = _spawnPoint;
             model.Init(Data.Type.Small, 1, 3, 2, 2);
             _activeEnemies.Add(model);
-            _signalBus.Fire(new SpawnEnemySignal(model));
+            _dispatcher.Raise(new SpawnEnemySignal(model));
         }
 
-        public void ReturnToPool(EnemyDiedSignal signal)
+        public void ReturnToPool(Model model)
         {
-            var model = signal.Model;
             model.SetViewActiveState(false);
             model.Dispose();
             _activeEnemies.Remove(model);

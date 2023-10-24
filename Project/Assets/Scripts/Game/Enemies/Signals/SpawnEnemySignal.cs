@@ -2,10 +2,10 @@
 
 namespace Game.Enemies.Signals
 {
-    internal class SpawnEnemySignal
+    internal class SpawnEnemySignal : EnemySignal
     {
-        public readonly Model Model;
-
-        public SpawnEnemySignal(Model model) => Model = model;
+        public SpawnEnemySignal(Model model) : base(model)
+        {
+        }
     }
 }

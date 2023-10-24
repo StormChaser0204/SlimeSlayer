@@ -1,6 +1,8 @@
-﻿namespace Game.Character.Signals
+﻿using Common.SignalHandler;
+
+namespace Game.Character.Signals
 {
-    internal class BlockSignal
+    internal class BlockSignal : ISignal
     {
     }
 }

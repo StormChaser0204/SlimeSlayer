@@ -1,9 +1,9 @@
 using System;
-using UnityEngine;
+using Common.SignalHandler;
 
 namespace Common.SignalDispatching.Binding
 {
-    public class Binder<SignalHandlerBase> : MonoBehaviour
+    public class Binder<TSignalHandlerBase>
     {
         private Group Group { get; set; } = new();
         private Type SignalType { get; set; }
@@ -12,8 +12,8 @@ namespace Common.SignalDispatching.Binding
 
         internal Binder(Action<Group, Type> adder) => _action = adder;
 
-        public Binder<SignalHandlerBase> Handler<T>()
-            where T : SignalHandlerBase
+        public Binder<TSignalHandlerBase> Handler<T>()
+            where T : TSignalHandlerBase
         {
             Add(typeof(T));
             return this;
@@ -21,7 +21,7 @@ namespace Common.SignalDispatching.Binding
 
         private void Add(Type type) => Group.Add(type);
 
-        public void To<T>()
+        public void To<T>() where T : ISignal
         {
             SignalType = typeof(T);
             Finish(SignalType);

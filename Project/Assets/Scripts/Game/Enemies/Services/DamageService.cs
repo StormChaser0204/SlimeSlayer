@@ -1,6 +1,7 @@
 ﻿using System.Linq;
+using Common.SignalDispatching.Dispatcher;
+using Game.Character.Signals;
 using Game.Enemies.Data;
-using Game.Enemies.Signals;
 using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
@@ -10,16 +11,15 @@ namespace Game.Enemies.Services
     [UsedImplicitly]
     internal class DamageService : ITickable
     {
-        private readonly Character.CharacterInfo _characterInfo;
-        private readonly ActiveEnemies _activeEnemies;
-        private readonly SignalBus _signalBus;
+        [Inject] private ISignalDispatcher _dispatcher;
 
-        public DamageService(Character.CharacterInfo characterInfo, ActiveEnemies activeEnemies,
-            SignalBus signalBus)
+        private readonly Character.Data.CharacterInfo _characterInfo;
+        private readonly ActiveEnemies _activeEnemies;
+
+        public DamageService(Character.Data.CharacterInfo characterInfo, ActiveEnemies activeEnemies)
         {
             _characterInfo = characterInfo;
             _activeEnemies = activeEnemies;
-            _signalBus = signalBus;
         }
 
         public void Tick()
@@ -42,7 +42,7 @@ namespace Game.Enemies.Services
 
             _characterInfo.UpdateHealth(-model.Damage);
             model.ResetAttackCooldown();
-            _signalBus.Fire(new CharacterHealthChangedSignal(_characterInfo.TotalHealth,
+            _dispatcher.Raise(new CharacterHealthChangedSignal(_characterInfo.TotalHealth,
                 _characterInfo.CurrentHealth));
         }
     }

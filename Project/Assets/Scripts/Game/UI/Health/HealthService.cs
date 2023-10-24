@@ -31,17 +31,17 @@ namespace Game.UI.Health
                 instancedBar.Value.UpdatePosition();
         }
 
-        public void InstantiateNewBar(SpawnEnemySignal signal)
+        public void InstantiateNewBar(Model model)
         {
-            if (_instancedBars.ContainsKey(signal.Model))
+            if (_instancedBars.ContainsKey(model))
             {
-                Reset(signal.Model);
+                Reset(model);
                 return;
             }
 
             var bar = Object.Instantiate(_prefab, _parent);
-            bar.Init(signal.Model.View.HealthBarTransform, _uiCamera);
-            _instancedBars.Add(signal.Model, bar);
+            bar.Init(model.View.HealthBarTransform, _uiCamera);
+            _instancedBars.Add(model, bar);
         }
 
         private void Reset(Model model)
@@ -51,14 +51,13 @@ namespace Game.UI.Health
             bar.UpdateValue(1);
         }
 
-        public void ReturnBar(EnemyDiedSignal signal) =>
-            _instancedBars[signal.Model].gameObject.SetActive(false);
+        public void DisableHealthBar(Model model) =>
+            _instancedBars[model].gameObject.SetActive(false);
 
-        public void UpdateHealthBar(EnemyHealthChangedSignal signal)
+        public void UpdateHealthBar(Model model)
         {
-            var model = signal.Model;
             var hp = model.Health / model.MaxHealth;
-            _instancedBars[signal.Model].UpdateValue(hp);
+            _instancedBars[model].UpdateValue(hp);
         }
     }
 }
