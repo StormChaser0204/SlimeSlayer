@@ -1670,22 +1670,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3921021916643663997, guid: 933b6c6a86a57db41a14adfaf6f38720, type: 3}
-      propertyPath: m_Type
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 3921021916643663997, guid: 933b6c6a86a57db41a14adfaf6f38720, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3921021916643663997, guid: 933b6c6a86a57db41a14adfaf6f38720, type: 3}
-      propertyPath: m_FillAmount
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3921021916643663997, guid: 933b6c6a86a57db41a14adfaf6f38720, type: 3}
-      propertyPath: m_FillMethod
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 4369963057320396159, guid: 933b6c6a86a57db41a14adfaf6f38720, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
