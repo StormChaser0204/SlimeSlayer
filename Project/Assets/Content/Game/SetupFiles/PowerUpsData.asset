@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51e128a0fe7e4cec802f18f9d8daa23e, type: 3}
+  m_Name: PowerUpsData
+  m_EditorClassIdentifier: 
+  <Info>k__BackingField:
+  - Type: 0
+    Required: 
+    Blocked: 
+    ModifierType: 0
+    ModifierValue: 5
+  - Type: 1
+    Required: 00000000
+    Blocked: 
+    ModifierType: 0
+    ModifierValue: 5
+  - Type: 2
+    Required: 01000000
+    Blocked: 
+    ModifierType: 0
+    ModifierValue: 10
+  - Type: 3
+    Required: 
+    Blocked: 
+    ModifierType: 1
+    ModifierValue: 2
+  - Type: 4
+    Required: 03000000
+    Blocked: 
+    ModifierType: 1
+    ModifierValue: 2
+  - Type: 5
+    Required: 04000000
+    Blocked: 
+    ModifierType: 1
+    ModifierValue: 5
+  - Type: 6
+    Required: 
+    Blocked: 
+    ModifierType: 2
+    ModifierValue: 1
+  - Type: 7
+    Required: 06000000
+    Blocked: 
+    ModifierType: 2
+    ModifierValue: 1
+  - Type: 8
+    Required: 07000000
+    Blocked: 
+    ModifierType: 2
+    ModifierValue: 2
+  - Type: 9
+    Required: 
+    Blocked: 
+    ModifierType: 3
+    ModifierValue: 1
+  - Type: 10
+    Required: 09000000
+    Blocked: 
+    ModifierType: 3
+    ModifierValue: 1
+  - Type: 11
+    Required: 0a000000
+    Blocked: 
+    ModifierType: 3
+    ModifierValue: 1

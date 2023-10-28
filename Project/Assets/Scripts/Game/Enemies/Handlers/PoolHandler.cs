@@ -20,7 +20,7 @@ namespace Game.Enemies.Handlers
         {
             if (SignalIs<EnemyDiedSignal>())
             {
-                SpawnService.ReturnToPool(SignalAs<EnemyDiedSignal>().Model);
+                _spawnService.ReturnToPool(SignalAs<EnemyDiedSignal>().Model);
             }
         }
     }

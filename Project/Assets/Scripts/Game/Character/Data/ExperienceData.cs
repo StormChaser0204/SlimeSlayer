@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Game.Character.Data
 {
-    [CreateAssetMenu(fileName = "ExperienceAmountByEnemyTypeMap", menuName = "Game/Data", order = 1)]
+    [CreateAssetMenu(fileName = "ExperienceData", menuName = "Game/Data/ExperienceData", order = 1)]
     internal class ExperienceData : ScriptableObject
     {
         [System.Serializable]

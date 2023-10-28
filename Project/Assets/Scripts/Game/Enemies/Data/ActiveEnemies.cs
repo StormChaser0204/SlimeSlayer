@@ -4,7 +4,7 @@ using JetBrains.Annotations;
 namespace Game.Enemies.Data
 {
     [UsedImplicitly]
-    internal class InstancedEnemies : List<Model>
+    internal class ActiveEnemies : List<Model>
     {
     }
 }

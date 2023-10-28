@@ -14,18 +14,18 @@ namespace Game.Enemies.Services
         [Inject] private ISignalDispatcher _dispatcher;
 
         private readonly Character.Data.CharacterInfo _characterInfo;
-        private readonly InstancedEnemies _instancedEnemies;
+        private readonly ActiveEnemies _activeEnemies;
 
         public DamageService(Character.Data.CharacterInfo characterInfo,
-            InstancedEnemies instancedEnemies)
+            ActiveEnemies activeEnemies)
         {
             _characterInfo = characterInfo;
-            _instancedEnemies = instancedEnemies;
+            _activeEnemies = activeEnemies;
         }
 
         public void Tick()
         {
-            var readyToAttack = _instancedEnemies.Where(e => e.IsAlive).Where(e => e.EndPointReached);
+            var readyToAttack = _activeEnemies.Where(e => e.EndPointReached);
 
             foreach (var enemy in readyToAttack)
             {

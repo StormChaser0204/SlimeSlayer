@@ -15,12 +15,15 @@ namespace Game.Enemies.Services
     {
         [Inject] private ISignalDispatcher _dispatcher;
 
+        private readonly ActiveEnemies _activeEnemies;
         private readonly Factory _factory;
         private readonly Vector3 _spawnPoint;
         private readonly RepeatableAction _spawn;
 
-        public SpawnService(Factory factory, Transform spawnPoint, float spawnTime)
+        public SpawnService(ActiveEnemies activeEnemies, Factory factory, Transform spawnPoint,
+            float spawnTime)
         {
+            _activeEnemies = activeEnemies;
             _factory = factory;
             _spawnPoint = spawnPoint.position;
             _spawn = new RepeatableAction(spawnTime, SpawnUnit);
@@ -35,10 +38,12 @@ namespace Game.Enemies.Services
             model.View.transform.position = _spawnPoint;
             model.Init(Data.Type.Small, 1, 3, 2, 2);
             _dispatcher.Raise(new SpawnEnemySignal(model));
+            _activeEnemies.Add(model);
         }
 
-        public static void ReturnToPool(Model model)
+        public void ReturnToPool(Model model)
         {
+            _activeEnemies.Remove(model);
             model.SetViewActiveState(false);
             model.Dispose();
         }

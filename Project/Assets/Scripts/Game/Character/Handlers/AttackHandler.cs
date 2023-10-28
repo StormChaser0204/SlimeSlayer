@@ -14,7 +14,7 @@ namespace Game.Character.Handlers
     internal class AttackHandler : SignalHandler
     {
         [Inject] private readonly Data.CharacterInfo _characterInfo;
-        [Inject] private readonly InstancedEnemies _instancedEnemies;
+        [Inject] private readonly ActiveEnemies _activeEnemies;
         [Inject] private readonly ISignalDispatcher _dispatcher;
 
         public AttackHandler(ISignal signal) : base(signal)
@@ -23,7 +23,7 @@ namespace Game.Character.Handlers
 
         public override void Handle()
         {
-            var enemiesInRange = _instancedEnemies.Where(e => e.IsAlive).Where(InRange);
+            var enemiesInRange = _activeEnemies.Where(InRange).ToArray();
 
             foreach (var enemy in enemiesInRange)
                 DealDamage(_characterInfo.Damage, enemy);

@@ -3,6 +3,8 @@ using Game.Character.Data;
 using Game.Character.Handlers;
 using Game.Character.Services;
 using Game.Character.Signals;
+using Game.Common.GameState;
+using Game.Common.GameState.Signals;
 using Game.Enemies;
 using Game.Enemies.Data;
 using Game.Enemies.Handlers;
@@ -31,6 +33,7 @@ namespace Game
         [SerializeField] private int _nextLevelExp;
         [SerializeField] private int _levelScaler;
         [SerializeField] private ExperienceData _experienceData;
+        [SerializeField] private PowerUpData _powerUpData;
 
         [Space] [SerializeField] private float _spawnTime;
         [SerializeField] private Transform _spawnPoint;
@@ -40,6 +43,7 @@ namespace Game
         [Space] [SerializeField] private HealthBar _healthBarPrefab;
         [SerializeField] private Transform _healthBarParent;
         [SerializeField] private CharacterPanel _characterPanel;
+        [SerializeField] private DialogsLauncher _dialogsLauncher;
         [SerializeField] private Camera _mainCamera;
 
         private ISignalDispatcher _dispatcher;
@@ -49,9 +53,16 @@ namespace Game
             _dispatcher = new SignalDispatcher(Container);
             Container.Bind<ISignalDispatcher>().FromInstance(_dispatcher).AsSingle();
 
+            InstallCommon();
             InstallCharacter();
             InstallEnemies();
             InstallUI();
+        }
+
+        private void InstallCommon()
+        {
+            _dispatcher.Bind().Handler<TimeScaleHandler>().To<PauseGameSignal>();
+            _dispatcher.Bind().Handler<TimeScaleHandler>().To<ResumeGameSignal>();
         }
 
         private void InstallCharacter()
@@ -79,10 +90,13 @@ namespace Game
             Container.Bind<ExperienceService>().AsSingle()
                 .WithArguments(_nextLevelExp, _levelScaler);
 
+            Container.Bind<PowerUpService>().AsSingle()
+                .WithArguments(_powerUpData);
+
             _dispatcher.Bind().Handler<AttackHandler>().To<AttackSignal>();
             _dispatcher.Bind().Handler<BlockHandler>().To<BlockSignal>();
             _dispatcher.Bind().Handler<ExperienceHandler>().To<EnemyDiedSignal>();
-            _dispatcher.Bind().Handler<PowerUpHandler>().To<LevelUpSignal>();
+            _dispatcher.Bind().Handler<PowerUpHandler>().To<SelectPowerUpSignal>();
         }
 
         private void InstallEnemies()
@@ -91,7 +105,7 @@ namespace Game
             Container.BindFactory<Model, Factory>()
                 .FromPoolableMemoryPool(x => x.WithInitialSize(1).FromFactory<CustomFactory>());
 
-            Container.Bind<InstancedEnemies>().AsSingle();
+            Container.Bind<ActiveEnemies>().AsSingle();
             Container.BindInterfacesAndSelfTo<SpawnService>().AsSingle()
                 .WithArguments(_spawnPoint, _spawnTime);
             Container.BindInterfacesAndSelfTo<EnemiesMovementService>().AsSingle()
@@ -107,16 +121,19 @@ namespace Game
             Container.BindInstance(_characterPanel);
             _characterPanel.Init(0, _nextLevelExp, _mainCamera);
 
+            Container.BindInterfacesTo<DialogsLauncher>().FromInstance(_dialogsLauncher).AsSingle();
+
             Container.BindInterfacesAndSelfTo<HealthService>().AsSingle()
                 .WithArguments(_healthBarPrefab, _healthBarParent, _mainCamera);
 
-            _dispatcher.Bind().Handler<EnemyHealthBarHandler>().To<SpawnEnemySignal>();
-            _dispatcher.Bind().Handler<EnemyHealthBarHandler>().To<EnemyDiedSignal>();
-            _dispatcher.Bind().Handler<EnemyHealthBarHandler>().To<EnemyHealthChangedSignal>();
+            _dispatcher.Bind().Handler<EnemyHealthBarInstanceHandler>().To<SpawnEnemySignal>();
+            _dispatcher.Bind().Handler<EnemyHealthBarInstanceHandler>().To<EnemyDiedSignal>();
+            _dispatcher.Bind().Handler<EnemyHealthBarValueHandler>().To<EnemyHealthChangedSignal>();
 
             _dispatcher.Bind().Handler<CharacterNewLevelHandler>().To<LevelUpSignal>();
             _dispatcher.Bind().Handler<CharacterLevelProgressHandler>().To<ExperienceChangedSignal>();
-            _dispatcher.Bind().Handler<CharacterHealthHandler>().To<CharacterHealthChangedSignal>();
+            _dispatcher.Bind().Handler<CharacterHealthBarValueHandler>()
+                .To<CharacterHealthChangedSignal>();
         }
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using Game.Character.Signals;
 using Game.Enemies.Data;
-using Game.Enemies.Signals;
 using JetBrains.Annotations;
 using UnityEngine;
 using Zenject;
@@ -48,7 +46,7 @@ namespace Game.UI.Health
         {
             var bar = _instancedBars[model];
             bar.gameObject.SetActive(true);
-            bar.UpdateValue(1);
+            bar.UpdateValue(model.TotalHealth);
         }
 
         public void DisableHealthBar(Model model) =>
@@ -56,7 +54,7 @@ namespace Game.UI.Health
 
         public void UpdateHealthBar(Model model)
         {
-            var hp = model.Health / model.MaxHealth;
+            var hp = model.Health / model.TotalHealth;
             _instancedBars[model].UpdateValue(hp);
         }
     }

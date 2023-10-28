@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using Common.SignalHandler;
 using Common.SignalHandler.Handlers;
 using Cysharp.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace Game.Character.Handlers
         public override async UniTask Handle(CancellationToken cancellationToken = default)
         {
             _characterInfo.SetInvulnerableActiveState(true);
-            await UniTask.WaitForSeconds(_characterInfo.InvulnerableDuration,
+            await UniTask.Delay(TimeSpan.FromSeconds(_characterInfo.InvulnerableDuration),
                 cancellationToken: cancellationToken);
             _characterInfo.SetInvulnerableActiveState(false);
         }

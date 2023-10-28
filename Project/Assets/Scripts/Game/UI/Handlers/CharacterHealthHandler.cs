@@ -6,14 +6,14 @@ using Zenject;
 namespace Game.UI.Handlers
 {
     [UsedImplicitly]
-    internal class CharacterHealthHandler : SignalHandler
+    internal class CharacterHealthBarValueHandler : SignalHandler
     {
         [Inject] private CharacterPanel _characterPanel;
 
         private readonly int _totalHealth;
         private readonly int _newHealth;
 
-        public CharacterHealthHandler(CharacterHealthChangedSignal signal) : base(signal)
+        public CharacterHealthBarValueHandler(CharacterHealthChangedSignal signal) : base(signal)
         {
             _totalHealth = signal.TotalHealth;
             _newHealth = signal.NewHealth;

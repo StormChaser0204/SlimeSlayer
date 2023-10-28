@@ -1,8 +1,6 @@
 using Common.SignalDispatching.Dispatcher;
-using Game.Character;
 using Game.Character.Data;
 using Game.Character.Signals;
-using Game.Enemies.Signals;
 using Game.UI.Health;
 using TMPro;
 using UnityEngine;

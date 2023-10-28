@@ -11,24 +11,23 @@ namespace Game.Enemies.Data
 
         public Type Type;
         public int Damage;
-        public float MaxHealth;
+        public float TotalHealth;
         public float Health;
         public float Speed;
         public float AttackCooldown;
         public bool EndPointReached;
-        public bool IsAlive => Health != 0;
 
         private IMemoryPool _pool;
         private float _baseAttackCooldown;
 
         public Model(View view) => View = view;
 
-        public void Init(Type type, int damage, int maxHealth, float speed, float attackCooldown)
+        public void Init(Type type, int damage, int totalHealth, float speed, float attackCooldown)
         {
             Type = type;
             Damage = damage;
-            MaxHealth = maxHealth;
-            Health = maxHealth;
+            TotalHealth = totalHealth;
+            Health = totalHealth;
             Speed = speed;
             AttackCooldown = attackCooldown;
             _baseAttackCooldown = attackCooldown;
