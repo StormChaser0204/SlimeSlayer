@@ -1,5 +1,8 @@
-public enum DialogType
+namespace Common.Dialogs
 {
-    Pause = 0,
-    PowerUp = 1,
+    public enum DialogType
+    {
+        Pause = 0,
+        PowerUp = 1,
+    }
 }

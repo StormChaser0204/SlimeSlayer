@@ -13,7 +13,7 @@ namespace Game.Character.Handlers
     [UsedImplicitly]
     internal class AttackHandler : SignalHandler
     {
-        [Inject] private readonly Data.CharacterInfo _characterInfo;
+        [Inject] private readonly Data.StatsInfo _statsInfo;
         [Inject] private readonly ActiveEnemies _activeEnemies;
         [Inject] private readonly ISignalDispatcher _dispatcher;
 
@@ -26,13 +26,13 @@ namespace Game.Character.Handlers
             var enemiesInRange = _activeEnemies.Where(InRange).ToArray();
 
             foreach (var enemy in enemiesInRange)
-                DealDamage(_characterInfo.Damage, enemy);
+                DealDamage(_statsInfo.Damage, enemy);
         }
 
         private bool InRange(Model model)
         {
-            var distance = Vector3.Distance(_characterInfo.AttackPosition, model.View.CurrentPosition);
-            return distance <= _characterInfo.AttackRange;
+            var distance = Vector3.Distance(_statsInfo.AttackPosition, model.EnemyFacade.CurrentPosition);
+            return distance <= _statsInfo.AttackRange;
         }
 
         private void DealDamage(float damage, Model model)

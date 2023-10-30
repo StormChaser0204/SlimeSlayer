@@ -13,14 +13,14 @@ namespace Game.Character.Services
     internal class PowerUpService
     {
         private readonly Dictionary<PowerUps.Type, Info> _powerUps;
-        private readonly CharacterInfo _characterInfo;
+        private readonly StatsInfo _statsInfo;
         private readonly List<PowerUps.Type> _active = new();
         private readonly HashSet<PowerUps.Type> _available = new();
         private readonly HashSet<PowerUps.Type> _blocked = new();
 
-        public PowerUpService(CharacterInfo characterInfo, PowerUpData data)
+        public PowerUpService(StatsInfo statsInfo, PowerUpData data)
         {
-            _characterInfo = characterInfo;
+            _statsInfo = statsInfo;
             _powerUps = data.Info.ToDictionary(i => i.Type, i => i);
             CheckAvailable();
         }
@@ -68,10 +68,10 @@ namespace Game.Character.Services
         {
             return type switch
             {
-                IncreaseHealth => new HealthModifier(_characterInfo, value),
-                IncreaseDamage => new DamageModifier(_characterInfo, value),
-                IncreaseHealthRegeneration => new HealthModifier(_characterInfo, value),
-                IncreaseAttackRange => new HealthModifier(_characterInfo, value),
+                IncreaseHealth => new HealthModifier(_statsInfo, value),
+                IncreaseDamage => new DamageModifier(_statsInfo, value),
+                IncreaseHealthRegeneration => new HealthModifier(_statsInfo, value),
+                IncreaseAttackRange => new HealthModifier(_statsInfo, value),
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             };
         }

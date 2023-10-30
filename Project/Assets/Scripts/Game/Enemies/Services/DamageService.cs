@@ -13,13 +13,13 @@ namespace Game.Enemies.Services
     {
         [Inject] private ISignalDispatcher _dispatcher;
 
-        private readonly Character.Data.CharacterInfo _characterInfo;
+        private readonly Character.Data.StatsInfo _statsInfo;
         private readonly ActiveEnemies _activeEnemies;
 
-        public DamageService(Character.Data.CharacterInfo characterInfo,
+        public DamageService(Character.Data.StatsInfo statsInfo,
             ActiveEnemies activeEnemies)
         {
-            _characterInfo = characterInfo;
+            _statsInfo = statsInfo;
             _activeEnemies = activeEnemies;
         }
 
@@ -40,12 +40,12 @@ namespace Game.Enemies.Services
         {
             model.ResetAttackCooldown();
 
-            if (_characterInfo.IsInvulnerable)
+            if (_statsInfo.IsInvulnerable)
                 return;
 
-            _characterInfo.UpdateHealth(-model.Damage);
-            _dispatcher.Raise(new CharacterHealthChangedSignal(_characterInfo.TotalHealth,
-                _characterInfo.CurrentHealth));
+            _statsInfo.UpdateHealth(-model.Damage);
+            _dispatcher.Raise(new CharacterHealthChangedSignal(_statsInfo.TotalHealth,
+                _statsInfo.CurrentHealth));
         }
     }
 }

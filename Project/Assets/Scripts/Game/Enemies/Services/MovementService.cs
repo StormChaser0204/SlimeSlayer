@@ -25,9 +25,9 @@ namespace Game.Enemies.Services
         {
             foreach (var unit in _units.Where(u => !u.EndPointReached))
             {
-                unit.View.CurrentPosition += Vector3.left * unit.Speed * Time.deltaTime;
+                unit.EnemyFacade.CurrentPosition += Vector3.left * unit.Speed * Time.deltaTime;
 
-                if (IsReached(unit.View.CurrentPosition))
+                if (IsReached(unit.EnemyFacade.CurrentPosition))
                     FinishMovement(unit);
             }
         }

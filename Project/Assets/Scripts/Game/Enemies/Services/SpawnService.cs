@@ -35,15 +35,13 @@ namespace Game.Enemies.Services
         {
             var model = _factory.Create();
             model.SetViewActiveState(true);
-            model.View.transform.position = _spawnPoint;
-            model.Init(Data.Type.Small, 1, 3, 2, 2);
+            model.EnemyFacade.transform.position = _spawnPoint;
+            model.SetData(Data.Type.Small, 1, 3, 2, 2);
             _dispatcher.Raise(new SpawnEnemySignal(model));
-            _activeEnemies.Add(model);
         }
 
-        public void ReturnToPool(Model model)
+        public void Deactivate(Model model)
         {
-            _activeEnemies.Remove(model);
             model.SetViewActiveState(false);
             model.Dispose();
         }

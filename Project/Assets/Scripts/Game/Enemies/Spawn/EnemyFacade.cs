@@ -1,8 +1,8 @@
 using UnityEngine;
 
-namespace Game.Enemies
+namespace Game.Enemies.Spawn
 {
-    internal class View : MonoBehaviour
+    internal class EnemyFacade : MonoBehaviour
     {
         [field: SerializeField] public Transform HealthBarTransform { get; private set; }
 

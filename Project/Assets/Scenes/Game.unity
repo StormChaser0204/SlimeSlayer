@@ -1354,7 +1354,7 @@ GameObject:
   - component: {fileID: 1041845363}
   - component: {fileID: 1041845365}
   m_Layer: 0
-  m_Name: SceneContext
+  m_Name: Bootstrapper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1416,30 +1416,27 @@ MonoBehaviour:
   m_GameObject: {fileID: 1041845362}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d2e6ed0167b5ed46b9edbf86c3cff28, type: 3}
+  m_Script: {fileID: 11500000, guid: d640d8300f3d6ea4faa0e15d9c554db0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _attackPosition: {fileID: 985812911}
-  _baseCharacterHealth: 5
-  _baseCharacterDamage: 1
-  _baseCharacterInvulnerableDuration: 2
-  _baseCharacterSpeed: 1
-  _baseAttackCooldown: 1
-  _baseBlockCooldown: 1
-  _baseAttackRange: 2
-  _nextLevelExp: 3
-  _levelScaler: 5
-  _experienceData: {fileID: 11400000, guid: 892b4f2f60b2b284fbe743ade4ce78e8, type: 2}
-  _powerUpData: {fileID: 11400000, guid: a05f56944aa09744391e0a15e6e00f72, type: 2}
-  _spawnTime: 5
-  _spawnPoint: {fileID: 1695022276}
-  _endPoint: {fileID: 985812911}
-  _enemyView: {fileID: 2493166981588610320, guid: b704a8fff199ed5459120a45a9df395d, type: 3}
-  _healthBarPrefab: {fileID: -1759619329586041326, guid: 933b6c6a86a57db41a14adfaf6f38720, type: 3}
-  _healthBarParent: {fileID: 1486778339}
-  _characterPanel: {fileID: 1760578348}
-  _dialogsLauncher: {fileID: 1960732612}
-  _mainCamera: {fileID: 519420031}
+  _characterInstaller:
+    _attackPosition: {fileID: 985812911}
+    _baseStats: {fileID: 11400000, guid: eaf6b375194b57940a73a38b1b63abb8, type: 2}
+    _experienceData: {fileID: 11400000, guid: ab6f243ff9e80e3428875ecb0e21822b, type: 2}
+    _experienceForEnemyKillData: {fileID: 11400000, guid: 892b4f2f60b2b284fbe743ade4ce78e8, type: 2}
+    _powerUpData: {fileID: 11400000, guid: a05f56944aa09744391e0a15e6e00f72, type: 2}
+  _enemiesInstaller:
+    _spawnTime: 5
+    _spawnPoint: {fileID: 1695022276}
+    _endPoint: {fileID: 985812911}
+    _enemyFacade: {fileID: 2493166981588610320, guid: b704a8fff199ed5459120a45a9df395d, type: 3}
+  _uiInstaller:
+    _healthBarPrefab: {fileID: -1759619329586041326, guid: 933b6c6a86a57db41a14adfaf6f38720, type: 3}
+    _healthBarParent: {fileID: 1486778339}
+    _characterPanel: {fileID: 1760578348}
+    _dialogsLauncher: {fileID: 1960732612}
+    _mainCamera: {fileID: 519420031}
+    _experienceData: {fileID: 11400000, guid: ab6f243ff9e80e3428875ecb0e21822b, type: 2}
 --- !u!1 &1273601729
 GameObject:
   m_ObjectHideFlags: 0

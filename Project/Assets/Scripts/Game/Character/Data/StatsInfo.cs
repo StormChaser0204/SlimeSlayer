@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Game.Character.Data
 {
     [UsedImplicitly]
-    internal class CharacterInfo
+    internal class StatsInfo
     {
         public int TotalHealth { get; }
         public int CurrentHealth { get; private set; }
@@ -16,7 +16,7 @@ namespace Game.Character.Data
         public bool IsInvulnerable { get; private set; }
         public float InvulnerableDuration { get; private set; }
 
-        public CharacterInfo(int health, float damage, float attackRange, Vector3 attackPosition,
+        public StatsInfo(int health, float damage, float attackRange, Vector3 attackPosition,
             float invulnerableDuration)
         {
             TotalHealth = health;

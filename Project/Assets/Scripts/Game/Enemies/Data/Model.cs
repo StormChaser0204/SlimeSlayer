@@ -1,4 +1,5 @@
 using System;
+using Game.Enemies.Spawn;
 using JetBrains.Annotations;
 using Zenject;
 
@@ -7,8 +8,7 @@ namespace Game.Enemies.Data
     [UsedImplicitly]
     internal class Model : IPoolable<IMemoryPool>, IDisposable
     {
-        public readonly View View;
-
+        public EnemyFacade EnemyFacade;
         public Type Type;
         public int Damage;
         public float TotalHealth;
@@ -20,9 +20,9 @@ namespace Game.Enemies.Data
         private IMemoryPool _pool;
         private float _baseAttackCooldown;
 
-        public Model(View view) => View = view;
+        public void SetView(EnemyFacade enemyFacade) => EnemyFacade = enemyFacade;
 
-        public void Init(Type type, int damage, int totalHealth, float speed, float attackCooldown)
+        public void SetData(Type type, int damage, int totalHealth, float speed, float attackCooldown)
         {
             Type = type;
             Damage = damage;
@@ -42,6 +42,6 @@ namespace Game.Enemies.Data
 
         public void Dispose() => _pool.Despawn(this);
 
-        public void SetViewActiveState(bool isActive) => View.gameObject.SetActive(isActive);
+        public void SetViewActiveState(bool isActive) => EnemyFacade.gameObject.SetActive(isActive);
     }
 }

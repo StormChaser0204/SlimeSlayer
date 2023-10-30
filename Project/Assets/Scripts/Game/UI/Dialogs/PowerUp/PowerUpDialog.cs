@@ -3,7 +3,7 @@ using Common.Dialogs;
 using Game.Character.PowerUps;
 using UnityEngine;
 
-namespace Game.UI.Dialogs
+namespace Game.UI.Dialogs.PowerUp
 {
     internal class PowerUpDialog : DialogBase
     {

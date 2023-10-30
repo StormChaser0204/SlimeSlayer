@@ -4,10 +4,10 @@ namespace Game.Character.PowerUps.Modifiers
 {
     internal class AttackRangeModifier : ModifierBase
     {
-        public AttackRangeModifier(CharacterInfo characterInfo, int value) : base(characterInfo, value)
+        public AttackRangeModifier(StatsInfo statsInfo, int value) : base(statsInfo, value)
         {
         }
 
-        public override void Process() => CharacterInfo.UpdateDamage(Value);
+        public override void Process() => StatsInfo.UpdateDamage(Value);
     }
 }

@@ -12,7 +12,7 @@ namespace Game.Character.Handlers
     [UsedImplicitly]
     internal class BlockHandler : TaskSignalHandler
     {
-        [Inject] private CharacterInfo _characterInfo;
+        [Inject] private StatsInfo _statsInfo;
 
         public BlockHandler(ISignal signal) : base(signal)
         {
@@ -20,10 +20,10 @@ namespace Game.Character.Handlers
 
         public override async UniTask Handle(CancellationToken cancellationToken = default)
         {
-            _characterInfo.SetInvulnerableActiveState(true);
-            await UniTask.Delay(TimeSpan.FromSeconds(_characterInfo.InvulnerableDuration),
+            _statsInfo.SetInvulnerableActiveState(true);
+            await UniTask.Delay(TimeSpan.FromSeconds(_statsInfo.InvulnerableDuration),
                 cancellationToken: cancellationToken);
-            _characterInfo.SetInvulnerableActiveState(false);
+            _statsInfo.SetInvulnerableActiveState(false);
         }
     }
 }

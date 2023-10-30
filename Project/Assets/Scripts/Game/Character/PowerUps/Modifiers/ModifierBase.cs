@@ -4,12 +4,12 @@ namespace Game.Character.PowerUps.Modifiers
 {
     internal abstract class ModifierBase
     {
-        protected readonly CharacterInfo CharacterInfo;
+        protected readonly StatsInfo StatsInfo;
         protected readonly int Value;
 
-        protected ModifierBase(CharacterInfo characterInfo, int value)
+        protected ModifierBase(StatsInfo statsInfo, int value)
         {
-            CharacterInfo = characterInfo;
+            StatsInfo = statsInfo;
             Value = value;
         }
 

@@ -4,10 +4,10 @@ namespace Game.Character.PowerUps.Modifiers
 {
     internal class HealthRegenerationModifier : ModifierBase
     {
-        public HealthRegenerationModifier(CharacterInfo characterInfo, int value) : base(characterInfo, value)
+        public HealthRegenerationModifier(StatsInfo statsInfo, int value) : base(statsInfo, value)
         {
         }
 
-        public override void Process() => CharacterInfo.UpdateDamage(Value);
+        public override void Process() => StatsInfo.UpdateDamage(Value);
     }
 }

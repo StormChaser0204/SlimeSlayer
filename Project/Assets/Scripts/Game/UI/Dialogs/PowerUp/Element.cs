@@ -3,7 +3,7 @@ using Game.Character.PowerUps;
 using TMPro;
 using UnityEngine;
 
-namespace Game.UI.Dialogs
+namespace Game.UI.Dialogs.PowerUp
 {
     internal class Element : MonoBehaviour
     {

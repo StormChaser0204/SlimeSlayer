@@ -1,4 +1,5 @@
 ﻿using System.Threading;
+using Common.Dialogs;
 using Common.SignalDispatching.Dispatcher;
 using Common.SignalHandler;
 using Common.SignalHandler.Handlers;
@@ -7,6 +8,7 @@ using Game.Character.PowerUps;
 using Game.Character.Services;
 using Game.Common.GameState.Signals;
 using Game.UI.Dialogs;
+using Game.UI.Dialogs.PowerUp;
 using JetBrains.Annotations;
 using Zenject;
 

@@ -6,12 +6,12 @@ namespace Game.Character.Services
     [UsedImplicitly]
     internal class ActionService
     {
-        private readonly CharacterInfo _characterInfo;
+        private readonly StatsInfo _statsInfo;
 
         private float _invulnerableDuration;
 
-        public ActionService(CharacterInfo info) => _characterInfo = info;
+        public ActionService(StatsInfo info) => _statsInfo = info;
 
-        public void IncreaseDamage() => _characterInfo.UpdateDamage(2);
+        public void IncreaseDamage() => _statsInfo.UpdateDamage(2);
     }
 }

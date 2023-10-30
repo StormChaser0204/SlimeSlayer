@@ -4,10 +4,10 @@ namespace Game.Character.PowerUps.Modifiers
 {
     internal class DamageModifier : ModifierBase
     {
-        public DamageModifier(CharacterInfo characterInfo, int value) : base(characterInfo, value)
+        public DamageModifier(StatsInfo statsInfo, int value) : base(statsInfo, value)
         {
         }
 
-        public override void Process() => CharacterInfo.UpdateDamage(Value);
+        public override void Process() => StatsInfo.UpdateDamage(Value);
     }
 }

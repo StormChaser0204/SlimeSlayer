@@ -4,10 +4,10 @@ namespace Game.Character.PowerUps.Modifiers
 {
     internal class HealthModifier : ModifierBase
     {
-        public HealthModifier(CharacterInfo characterInfo, int value) : base(characterInfo, value)
+        public HealthModifier(StatsInfo statsInfo, int value) : base(statsInfo, value)
         {
         }
 
-        public override void Process() => CharacterInfo.UpdateHealth(Value);
+        public override void Process() => StatsInfo.UpdateHealth(Value);
     }
 }

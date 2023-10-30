@@ -38,7 +38,7 @@ namespace Game.UI.Health
             }
 
             var bar = Object.Instantiate(_prefab, _parent);
-            bar.Init(model.View.HealthBarTransform, _uiCamera);
+            bar.Init(model.EnemyFacade.HealthBarTransform, _uiCamera);
             _instancedBars.Add(model, bar);
         }
 

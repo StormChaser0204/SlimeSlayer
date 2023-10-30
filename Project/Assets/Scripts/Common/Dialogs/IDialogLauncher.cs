@@ -1,7 +1,10 @@
 using UnityEngine;
 
-public interface IDialogsLauncher
+namespace Common.Dialogs
 {
-    T Show<T>(DialogType dialogType);
-    GameObject Show(DialogType dialogType);
+    public interface IDialogsLauncher
+    {
+        T Show<T>(DialogType dialogType);
+        GameObject Show(DialogType dialogType);
+    }
 }
